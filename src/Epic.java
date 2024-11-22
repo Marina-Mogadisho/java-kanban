@@ -22,9 +22,9 @@ public class Epic extends Task {
      */
     @Override
     public void addSubtask(Subtask subtask) {
-        Integer new_id_subtask = TaskManager.getId(); // // увеличили счетчик newid++ и присвоили id
-        subtask.setId(new_id_subtask); // добавили id в поле объекта задачи
-        subtasks.put(new_id_subtask, subtask);//положили задачу в коллекцию с подзадачами, HashMap  subtasks
+        subtasks.put(subtask.getId(), subtask);//положили задачу в коллекцию с подзадачами, HashMap  subtasks
+        //Status status = getStatus();
+
     }
 
     /**
@@ -44,8 +44,7 @@ public class Epic extends Task {
         }
         if (is_new) {
             return Status.NEW;
-        }
-        else {
+        } else {
             boolean is_done = true;
             for (Subtask subtask : subtasks.values()) {
                 Status status = subtask.getStatus();
@@ -62,6 +61,7 @@ public class Epic extends Task {
         }
     }
 
+    @Override
     public HashMap<Integer, Subtask> getAllSubtask() {
         return subtasks;
     }

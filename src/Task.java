@@ -2,6 +2,18 @@ import java.util.HashMap;
 
 public class Task {
     private String title;
+    private String description;
+    private Integer id;
+    private Status status;
+
+    /**
+     * Конструктор
+     * */
+    public Task(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
 
     public void setStatus(Status status) {
         this.status = status;
@@ -23,25 +35,13 @@ public class Task {
         this.title = title;
     }
 
-    private String description;
-    private Integer id;
-    private Status status;
-    /**
-     * Конструктор
-     * */
-    public Task(String title, String description, Status status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
-    }
    /**
     * Установка идентификатора задачи
     * */
-    public void setId(Integer newId) {  // Метод, берет на входе номер newId и приравнивает его к полю id задачи
-        if(id == null) {
-            id = newId;
-        }
+    public void setId(Integer id) {  // Метод, берет на входе номер newId и приравнивает его к полю id задачи
+           this.id =  id;
     }
+
     /**
      * Получение идентификатора задачи
      * */
@@ -58,8 +58,6 @@ public class Task {
     public HashMap<Integer, Subtask> getAllSubtask() {
         return null;
     }
-
-
 
     @Override
     public String toString() {

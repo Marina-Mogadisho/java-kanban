@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -44,16 +46,100 @@ public class Main {
         manager.addTask(epic1);// добавляем Epic
         manager.addTask(epic2);
         manager.addTask(epic3);
-        manager.addTask(task3);// добавляем Epic под видом Task
+        manager.addSubtaskInEpic(epic1.getId(), subtask1_Epic1);
+        manager.addSubtaskInEpic(epic1.getId(), subtask2_Epic1);
+        manager.addSubtaskInEpic(epic2.getId(), subtask1_Epic2);
+        manager.addSubtaskInEpic(epic3.getId(), subtask1_Epic3);
+        manager.addSubtaskInEpic(epic3.getId(), subtask2_Epic3);
 
-        System.out.println(manager.getById(3)); // 1. Получение задачи по идентификатору
+
+        //manager.addTask(task3);// добавляем Epic под видом Task
+
+        System.out.println();
+        System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
+        System.out.println(manager.getById(2));
+        System.out.println();
+
+        System.out.println("Получение списка всех Task:");
+        System.out.println(manager.getListAllTasks());
+        System.out.println();
+
+        System.out.println("Получение списка всех Epic:");
+        System.out.println(manager.getListAllEpic());
+        System.out.println();
+
+        System.out.println("Получение одного конкретного Subtask по id Epic и id Subtask:");
+        System.out.println("Сначала выводим Epic, его id " + epic1.getId());
+        System.out.println(epic1);
+        System.out.println("Потом Subtasks (id " + subtask1_Epic1.getId() + ", " + subtask2_Epic1.getId() + ")");
+        System.out.println(manager.getSubtaskForEpicId(epic1.getId(), subtask1_Epic1.getId()));
+        System.out.println(manager.getSubtaskForEpicId(epic1.getId(), subtask2_Epic1.getId()));
+        System.out.println();
+
+        System.out.println("Получение списка Subtask по id Epic = " + epic1.getId());
+        System.out.println(manager.getListAllSubtaskForEpicId(epic1.getId()));
+        System.out.println("Получение списка Subtask по id Epic = " + epic2.getId());
+        System.out.println(manager.getListAllSubtaskForEpicId(epic2.getId()));
+        System.out.println("Получение списка Subtask по id Epic = " + epic3.getId());
+        System.out.println(manager.getListAllSubtaskForEpicId(epic3.getId()));
+        System.out.println();
+
+        System.out.println("Вызов метода: Удаление Task по идентификатору (id = " + task2.getId() + ").");
+        manager.removeByIdTask(task2.getId());
+        System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
+        System.out.println(manager.getById(2));
+        System.out.println();
+        System.out.println("Получение списка всех Task:");
+        System.out.println(manager.getListAllTasks());
+        System.out.println();
+
+
+        System.out.println("Вызов метода: Удаление Epic по идентификатору (id = " + epic3.getId() + ").");
+        manager.removeByIdEpic(epic3.getId());
+        System.out.println("Получение списка всех Epic:");
+        System.out.println(manager.getListAllEpic());
+        System.out.println();
+
+
+        System.out.println("Получение списка Subtask по id Epic = " + epic3.getId());
+        ArrayList<Subtask> list_subtask3 = manager.getListAllSubtaskForEpicId(epic3.getId());
+        if(list_subtask3!=null)System.out.println(manager.getListAllSubtaskForEpicId(epic3.getId()));
+        else System.out.println("нет Epic id:"+epic3.getId());
+
+        System.out.println();
+
+        System.out.println("Вызов метода: Удаление Subtask по идентификатору Subtask (id = " + subtask1_Epic1.getId() + ").");
+        manager.removeByIdSubtask(subtask1_Epic1.getId());
+        System.out.println("Получение списка Subtask по id Epic = " + epic1.getId());
+        System.out.println(manager.getListAllSubtaskForEpicId(epic1.getId()));
 
 
 
 
 
-        /*
 
+        System.out.println("Вызов метода: Удаление всех Task.");
+        manager.removeAllTasks();
+        System.out.println("Получение списка всех Task:");
+        System.out.println(manager.getListAllTasks());
+        System.out.println();
+
+
+
+        System.out.println("Вызов метода: Удаление всех Epic.");
+        manager.removeAllEpic();
+        System.out.println("Получение списка всех Epic:");
+        System.out.println(manager.getListAllEpic());
+        System.out.println("Получение списка Subtask по id Epic = " + epic1.getId());
+        System.out.println(manager.getListAllSubtaskForEpicId(epic1.getId()));
+        System.out.println();
+
+        ///??????????? Программа выдает ошибку при запросе вывода Subtask, если их нет в коллекции
+
+
+
+
+/*
         // 1) Получили id  из задачи task2.getId() 2) getById() получение задачи по id
         Integer id1 = task1.getId();
         Task task = manager.getById(id1);
@@ -62,7 +148,7 @@ public class Main {
         System.out.println(task2);
         System.out.println(epic1);
 
-*/
+
 
 
         // manager.addTask(task2);// добавляем уже существующий Task те делаем UPDATE
@@ -83,6 +169,6 @@ public class Main {
 
         // Task epic=manager.getById(epic1.getId());
         //System.out.println(epic);
-
+*/
     }
 }
