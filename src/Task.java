@@ -52,8 +52,6 @@ public class Task {
     public Status getStatus() {
         return status;
     }
-    public void addSubtask(Subtask subtask) {
-    }
 
     public HashMap<Integer, Subtask> getAllSubtask() {
         return null;
@@ -61,7 +59,6 @@ public class Task {
 
     @Override
     public String toString() {
-
-        return "id " + id + ", status " + status + ", title " + title + ", description " + description;
+        return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() + ", description " + getDescription();
     }
 }

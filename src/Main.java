@@ -32,8 +32,6 @@ public class Main {
         Epic epic2 = new Epic("Epic 2", "Description epic 2");
         Epic epic3 = new Epic("Epic 3", "Description epic 3");
 
-        Task task3 = epic1;// преобразуем Epic к родительскому классу
-
         Subtask subtask1_Epic1 = new Subtask("Subtask 1", "Description subtask 1", Status.NEW);
         Subtask subtask2_Epic1 = new Subtask("Subtask 2", "Description subtask 2", Status.DONE);
         Subtask subtask1_Epic2 = new Subtask("Subtask 1", "Description subtask 1", Status.IN_PROGRESS);
@@ -43,17 +41,15 @@ public class Main {
 
         manager.addTask(task1);// добавляем Task
         manager.addTask(task2);// добавляем Task
-        manager.addTask(epic1);// добавляем Epic
-        manager.addTask(epic2);
-        manager.addTask(epic3);
+        manager.addEpic(epic1);// добавляем Epic
+        manager.addEpic(epic2);
+        manager.addEpic(epic3);
         manager.addSubtaskInEpic(epic1.getId(), subtask1_Epic1);
         manager.addSubtaskInEpic(epic1.getId(), subtask2_Epic1);
         manager.addSubtaskInEpic(epic2.getId(), subtask1_Epic2);
         manager.addSubtaskInEpic(epic3.getId(), subtask1_Epic3);
         manager.addSubtaskInEpic(epic3.getId(), subtask2_Epic3);
 
-
-        //manager.addTask(task3);// добавляем Epic под видом Task
 
         System.out.println();
         System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
@@ -97,7 +93,8 @@ public class Main {
         System.out.println("Вызов метода: Удаление Epic по идентификатору (id = " + epic3.getId() + ").");
         manager.removeByIdEpic(epic3.getId());
         System.out.println("Получение списка всех Epic:");
-        System.out.println(manager.getListAllEpic());
+        ArrayList<Task> list_all_epic = manager.getListAllEpic();
+        for(Task t:list_all_epic)System.out.println(t);
         System.out.println();
 
 

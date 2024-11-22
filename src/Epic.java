@@ -10,59 +10,13 @@ public class Epic extends Task {
     }
 
 
-    /**
-     * если у Epic попытаться изменить статус, то ничего не произойдет, выполнится пустая команда
-     */
-    @Override
-    public void setStatus(Status status) {
-    }
-
-    /**
-     * Метод добавления подзадачи в Epic
-     */
-    @Override
-    public void addSubtask(Subtask subtask) {
-        subtasks.put(subtask.getId(), subtask);//положили задачу в коллекцию с подзадачами, HashMap  subtasks
-        //Status status = getStatus();
-
-    }
-
-    /**
-     * Определяем статус Epic, через статусы подзадач
-     */
-    @Override
-    public Status getStatus() {
-        //Status st = super.getStatus();
-        boolean is_new = true;
-        for (Subtask subtask : subtasks.values()) {
-            Status status = subtask.getStatus(); // достаем статус из подзадачи с помощью метода класса родителя Task
-            // проверяем что все элементы
-            if (status != Status.NEW) {
-                is_new = false;
-                break;
-            }
-        }
-        if (is_new) {
-            return Status.NEW;
-        } else {
-            boolean is_done = true;
-            for (Subtask subtask : subtasks.values()) {
-                Status status = subtask.getStatus();
-                // проверяем что все элементы
-                if (status != Status.DONE) {
-                    is_done = false;
-                    break;
-                }
-            }
-            if (is_done) return Status.DONE;
-            else {
-                return Status.IN_PROGRESS;
-            }
-        }
-    }
-
     @Override
     public HashMap<Integer, Subtask> getAllSubtask() {
         return subtasks;
     }
+    @Override
+    public String toString() {
+           return super.toString()+" subtask:"+subtasks.values()+" ";
+    }
+
 }
