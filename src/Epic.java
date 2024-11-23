@@ -1,7 +1,9 @@
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Epic extends Task {
     private final HashMap<Integer, Subtask> subtasks;
+
 
     public Epic(String title, String description) {
         // конструктор родителя Task, который устанавливает параметры и статус
@@ -14,9 +16,24 @@ public class Epic extends Task {
     public HashMap<Integer, Subtask> getAllSubtask() {
         return subtasks;
     }
+
     @Override
     public String toString() {
-           return super.toString()+" subtask:"+subtasks.values()+" ";
+        return super.toString();
+        // return super.toString()+" subtask:"+subtasks.values()+" ";
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!super.equals(object)) return false;
+        if (!Objects.equals(this, object)) return false;
+        return hashCode() != object.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() * 51 + subtasks.hashCode();
+    }
+
 
 }
