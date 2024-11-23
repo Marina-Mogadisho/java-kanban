@@ -74,7 +74,7 @@ public class Task {
     /**
      * Установка идентификатора задачи
      */
-    public void setId(Integer id) {  // Метод, берет на входе номер id и приравнивает его к полю id задачи
+    public void setId(Integer id) {  // Метод, берет на входе номер id и приравнивает его к полю id задачи.
         this.id = id;
     }
 
