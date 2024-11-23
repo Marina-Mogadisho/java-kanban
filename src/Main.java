@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println();
-        System.out.println(" ***   Тестирование программы  ***");
+        System.out.println(" ***  Тестирование программы  ***");
         System.out.println();
 
         // ПРОВЕРЯЕМ ДОБАВЛЕНИЕ ЗАДАЧ

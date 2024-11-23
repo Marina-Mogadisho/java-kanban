@@ -6,7 +6,7 @@ public class Epic extends Task {
 
 
     public Epic(String title, String description) {
-        // конструктор родителя Task, который устанавливает параметры и статус.
+        // конструктор родителя Task, который устанавливает параметры и статус
         super(title, description, Status.NEW);
         subtasks = new HashMap<>(); // создаем коллекцию для подзадач, ссылку на коллекцию храним в subtasks
     }

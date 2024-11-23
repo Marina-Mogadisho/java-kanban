@@ -63,7 +63,7 @@ public class TaskManager {
      */
     public boolean addTask(Task task) {
         if (task == null) return false;
-        Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id.
+        Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id
         task.setId(id);  // Метод из класса Task, добавили номер id в поле объекта задачи
         tasks.put(task.getId(), task); //положили задачу в общую коллекцию с задачами, HashMap tasks
         return true;

@@ -5,7 +5,7 @@ public class Subtask extends Task {
     private Integer id_epic;
 
     public Subtask(String title, String description, Status status) {
-        super(title, description, status);  // установили параметры из конструктора родителя.
+        super(title, description, status);  // установили параметры из конструктора родителя
     }
     public Subtask(Integer id_subtask,Integer id_epic,String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
