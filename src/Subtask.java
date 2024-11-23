@@ -7,6 +7,11 @@ public class Subtask extends Task {
     public Subtask(String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
     }
+    public Subtask(Integer id_subtask,Integer id_epic,String title, String description, Status status) {
+        super(title, description, status);  // установили параметры из конструктора родителя
+        setId(id_subtask);
+        setIdEpic(id_epic);
+    }
 
     public Integer getIdEpic() {
         return id_epic;

@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Task {
@@ -75,7 +74,7 @@ public class Task {
     /**
      * Установка идентификатора задачи
      */
-    public void setId(Integer id) {  // Метод, берет на входе номер newId и приравнивает его к полю id задачи
+    public void setId(Integer id) {  // Метод, берет на входе номер id и приравнивает его к полю id задачи
         this.id = id;
     }
 
@@ -90,12 +89,9 @@ public class Task {
         return status;
     }
 
-    public HashMap<Integer, Subtask> getAllSubtask() {
-        return null;
-    }
-
     @Override
     public String toString() {
-        return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() + ", description " + getDescription();
+        return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() +
+                ", description " + getDescription();
     }
 }

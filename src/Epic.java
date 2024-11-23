@@ -11,8 +11,6 @@ public class Epic extends Task {
         subtasks = new HashMap<>(); // создаем коллекцию для подзадач, ссылку на коллекцию храним в subtasks
     }
 
-
-    @Override
     public HashMap<Integer, Subtask> getAllSubtask() {
         return subtasks;
     }
@@ -20,7 +18,6 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return super.toString();
-        // return super.toString()+" subtask:"+subtasks.values()+" ";
     }
 
     @Override
