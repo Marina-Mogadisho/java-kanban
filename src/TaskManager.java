@@ -234,7 +234,7 @@ public class TaskManager {
      **/
     public boolean removeByIdTask(Integer id) {
         Task task = tasks.remove(id);
-        return task == null;
+        return task != null;
     }
 
     /**

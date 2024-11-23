@@ -47,8 +47,10 @@ public class Main {
         System.out.println("добавляем Subtask 1 в Epic 3" + manager.addSubtaskInEpic(epic3.getId(), subtask2_Epic3));
 */
 
-        //  ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ
+        //  *** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ
+
         System.out.println();
+        System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ");
         System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
         System.out.println(manager.getByIdTask(2));
         System.out.println();
@@ -97,9 +99,9 @@ public class Main {
         System.out.println();
 
 
-        // ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ
+        // *** ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ
 
-        System.out.println("ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ");
+        System.out.println("***  ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ");
 
         System.out.println("Обновление Task");
         System.out.println("Получение старого Task, его id = " + task2.getId() + ":");
@@ -130,10 +132,16 @@ public class Main {
 
         System.out.println("Обновление subtask2_Epic1 " + manager.updateSubtaskAndEpic(subtask22_Epic1));
         System.out.println(manager.getSubtaskForEpicId(epic1.getId(), subtask22_Epic1.getId()));
+        System.out.println();
         System.out.println(manager.getByIdEpic(epic1.getId()));
+        System.out.println();
 
 
-        System.out.println("ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ");
+        //  *** ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ
+
+        System.out.println();
+        System.out.println(" *** ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ");
+
         System.out.println("Получение списка всех Task:");
         System.out.println(manager.getListAllTasks());
         System.out.println();
@@ -142,6 +150,13 @@ public class Main {
         System.out.println();
         System.out.println("Получение списка всех Task:");
         System.out.println(manager.getListAllTasks());
+        System.out.println();
+        System.out.println("Удаление всех Task");
+        manager.removeAllTasks();
+        System.out.println("Получение списка всех Task:");
+        System.out.println(manager.getListAllTasks());
+        System.out.println();
+
 
         System.out.println("Вызов метода: Удаление Epic по идентификатору (id = " + epic3.getId() + ").");
         manager.removeByIdEpic(epic3.getId());
