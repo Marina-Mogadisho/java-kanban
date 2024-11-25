@@ -163,14 +163,6 @@ public class TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
-   /*  //Получение одного конкретного Subtask по id Epic и id Subtask
-    public Subtask getSubtaskForEpicId(Integer idEpic, Integer idSubtask) {
-        Epic epic = epics.get(idEpic);
-        ArrayList <Integer> idListSubtask = epic.getAllSubtask();
-        return subtasks.get(idListSubtask);
-    }
-    */
-
     /**
      * Получение списка Subtask по id Epic
      *
@@ -272,7 +264,6 @@ public class TaskManager {
                 calcStatus(epic);
             }
         }
-
         return true;
     }
 
@@ -322,8 +313,6 @@ public class TaskManager {
 
         return true;
     }
-
-
 }
 
 

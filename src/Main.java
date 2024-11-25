@@ -36,7 +36,7 @@ public class Main {
         manager.addSubtask(subtask1_Epic3);
         manager.addSubtask(subtask2_Epic3);
 
-/*
+
         System.out.println("добавляем Task 1 " + manager.addTask(task1));
         System.out.println("добавляем Task 2 " + manager.addTask(task2));
         System.out.println("добавляем Epic 1 " + manager.addEpic(epic1));
@@ -47,8 +47,8 @@ public class Main {
         System.out.println("добавляем Subtask 1 в Epic 2 " + manager.addSubtask(subtask1_Epic2));
         System.out.println("добавляем Subtask 1 в Epic 3 " + manager.addSubtask(subtask1_Epic3));
         System.out.println("добавляем Subtask 1 в Epic 3 " + manager.addSubtask(subtask2_Epic3));
-*/
-        /*
+
+
 
         //  *** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***
 
@@ -82,8 +82,8 @@ public class Main {
         System.out.println(manager.getListAllSubtaskForEpicId(epic3.getId()));
         System.out.println();
 
-/*
-        // *** ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ ***
+
+       // *** ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ ***
 
         System.out.println("***  ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ  ***");
 
@@ -117,12 +117,12 @@ public class Main {
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
 
-*/
+
         //  *** ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ
 
         System.out.println();
         System.out.println(" *** ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ");
-/*
+
         System.out.println("Получение списка всех Task:");
         System.out.println(manager.getListAllTasks());
         System.out.println();
@@ -160,18 +160,18 @@ public class Main {
         System.out.println("Получение задачи Epic по идентификатору (id = " + epic1.getId() + "):");
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
-*/
+
 
         System.out.println("Получение списка Subtask по id Epic = " + epic1.getId());
         System.out.println(manager.getListAllSubtaskForEpicId(epic1.getId()));
         System.out.println("Получение задачи Epic по идентификатору (id = " + epic1.getId() + "):");
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
- /*
+
         System.out.println("Вызов метода: Удаление Subtask по идентификатору Subtask (id = " + subtask1_Epic1.getId() + ").");
         System.out.println(manager.removeSubtaskById(subtask1_Epic1.getId()));
         System.out.println();
- */
+
 
         System.out.println("Вызов метода: Удаление всех  Subtask.");
         System.out.println(manager.removeAllSubtasks());
