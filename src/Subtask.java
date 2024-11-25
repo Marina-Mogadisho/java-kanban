@@ -2,23 +2,24 @@ import java.util.Objects;
 
 public class Subtask extends Task {
 
-    private Integer id_epic;
+    private Integer idEpic;
 
     public Subtask(String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
     }
-    public Subtask(Integer id_subtask,Integer id_epic,String title, String description, Status status) {
+
+    public Subtask(Integer id_epic,String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
-        setId(id_subtask);
         setIdEpic(id_epic);
     }
 
     public Integer getIdEpic() {
-        return id_epic;
+        return idEpic;
     }
 
+
     public void setIdEpic(Integer id_epic) {
-        this.id_epic = id_epic;
+        this.idEpic = id_epic;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class Subtask extends Task {
 
     @Override
     public int hashCode() {
-        return super.hashCode() * 57 + id_epic.hashCode();
+        return super.hashCode() * 57 + idEpic.hashCode();
     }
 
 

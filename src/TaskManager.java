@@ -4,11 +4,13 @@ import java.util.HashMap;
 public class TaskManager {
     private final HashMap<Integer, Task> tasks;
     private final HashMap<Integer, Epic> epics;
+    private final HashMap<Integer, Subtask> subtasks;
     private int nextId;
 
     public TaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
+        subtasks = new HashMap<>();
         nextId = 1;
     }
 
@@ -22,16 +24,17 @@ public class TaskManager {
     /**
      * Вычисляем статус Epic
      */
-    private static void calcStatus(Epic epic) {
+    private void calcStatus(Epic epic) {
         if (epic == null) return;
-        HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-        if (subtasks == null) return;
-        if (subtasks.isEmpty()) {
+        ArrayList<Integer> idSubtasks = epic.getAllSubtask(); // достали из Epic список id Subtask
+        if (idSubtasks == null) return;
+        if (idSubtasks.isEmpty()) {
             epic.setStatus(Status.NEW);
             return;
         }
         boolean is_new = true;
-        for (Subtask subtask : subtasks.values()) {
+        for (Integer idSubtask : idSubtasks) {
+            Subtask subtask = subtasks.get(idSubtask);
             Status status = subtask.getStatus(); // достаем статус из подзадачи с помощью метода класса родителя Task
             if (status != Status.NEW) {
                 is_new = false;
@@ -42,7 +45,8 @@ public class TaskManager {
             epic.setStatus(Status.NEW);
         } else {
             boolean is_done = true;
-            for (Subtask subtask : subtasks.values()) {
+            for (Integer idSubtask : idSubtasks) {
+                Subtask subtask = subtasks.get(idSubtask);
                 Status status = subtask.getStatus();
                 if (status != Status.DONE) {
                     is_done = false;
@@ -61,30 +65,34 @@ public class TaskManager {
      *
      * @return статус операции true/false
      */
-    public boolean addTask(Task task) {
-        if (task == null) return false;
+    public boolean addTask(Task newTask) {
+        if (newTask == null) return false;
         Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id
-        task.setId(id);  // Метод из класса Task, добавили номер id в поле объекта задачи
-        tasks.put(task.getId(), task); //положили задачу в общую коллекцию с задачами, HashMap tasks
+        newTask.setId(id);  // Метод из класса Task, добавили номер id в поле объекта задачи
+        tasks.put(newTask.getId(), newTask); //положили задачу в общую коллекцию с задачами, HashMap tasks
         return true;
     }
 
     /**
-     * Добавление подзадачи (Subtask) в Epic по идентификатору (id) Epic
+     * Добавление подзадачи (Subtask), в нем есть поле idEpic
      *
      * @return статус операции true/false
      */
-    public boolean addSubtaskInEpic(Integer id_epic, Subtask new_subtask) {
-        if (new_subtask == null) return false;
-        Epic epic = getByIdEpic(id_epic);
-        if (epic == null) return false;
-        Integer new_id_subtask = getId(); // // увеличили счетчик ++ и присвоили id
-        new_subtask.setId(new_id_subtask); // добавили id в поле объекта подзадачи
-        new_subtask.setIdEpic(id_epic); // добавили id в поле объекта epic
-        epic.getAllSubtask().put(new_subtask.getId(), new_subtask); // Добавляем новый Subtask c id в HashMap subtask Epic
+    public boolean addSubtask(Subtask newSubtask) {
+        if (newSubtask == null) return false;  // если newSubtask пустой - вышли с false
+        if (newSubtask.getIdEpic() == null) return false; // если у newSubtask пустое поле IdEpic, вышли
+        Integer idEpic = newSubtask.getIdEpic(); //вытащили из newSubtask поле idEpic
+        if (!epics.containsKey(idEpic)) return false; // если нет такого idEpic в коллекции Epic, вышли
+        Integer id = getId(); // Метод, увеличили счетчик newId на 1 и присвоили id
+        newSubtask.setId(id); // Метод из класса Task, добавили номер id в поле объекта задачи
+        subtasks.put(newSubtask.getId(), newSubtask);//положили подзадачу в общую коллекцию HashMap subtasks
+        Epic epic = epics.get(idEpic); //вытащила значение Epic, в котором есть поле ArrayList c id Subtask
+        ArrayList<Integer> isSubtask = epic.getAllSubtask(); // вытащили из Epic ссылку на ее список  id Subtask
+        isSubtask.add(newSubtask.getId()); // добавили в  ArrayList этого Epic новый id нового newSubtask
         calcStatus(epic);
         return true;
     }
+
 
     /**
      * Добавление Epic
@@ -102,21 +110,31 @@ public class TaskManager {
 
     /**
      * Получение задачи (Task) по идентификатору (id)
-     *
+     * @param id идентификатор Task
      * @return ссылка на объект Task
      */
-    public Task getByIdTask(Integer id) { //Получение по идентификатору.
+    public Task getTaskById(Integer id) { //Получение по идентификатору.
         return tasks.get(id);
     }
 
     /**
      * Получение задачи Epic по идентификатору (id)
-     *
+     * @param id идентификатор Epic
      * @return ссылка на объект Epic
      */
-    public Epic getByIdEpic(Integer id) { //Получение по идентификатору.
+    public Epic getEpicById(Integer id) { //Получение по идентификатору.
         return epics.get(id);
     }
+
+    /**
+     * Получение Subtask по идентификатору (id)
+     * @param id идентификатор Subtask
+     * @return ссылка на объект Subtask
+     */
+    public Subtask getSubtaskById(Integer id) { //Получение по идентификатору.
+        return subtasks.get(id);
+    }
+
 
     /**
      * Получение списка всех Task
@@ -130,45 +148,58 @@ public class TaskManager {
     /**
      * Получение списка всех Epic
      *
-     * @return ссылка на объект ArrayList<Task>
+     * @return ссылка на объект ArrayList<Epic>
      **/
     public ArrayList<Epic> getListAllEpic() {
         return new ArrayList<>(epics.values());
     }
 
     /**
-     * Получение одного конкретного Subtask по id Epic и id Subtask
+     * Получение списка всех Subtask
      *
-     * @return ссылка на объект HashMap<Integer, Subtask> subtasks
+     * @return ссылка на объект ArrayList<Subtask>
      **/
+    public ArrayList<Subtask> getListAllSubtask() {
+        return new ArrayList<>(subtasks.values());
+    }
+
+   /*  //Получение одного конкретного Subtask по id Epic и id Subtask
     public Subtask getSubtaskForEpicId(Integer idEpic, Integer idSubtask) {
         Epic epic = epics.get(idEpic);
-        HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-        return subtasks.get(idSubtask);
+        ArrayList <Integer> idListSubtask = epic.getAllSubtask();
+        return subtasks.get(idListSubtask);
     }
+    */
 
     /**
      * Получение списка Subtask по id Epic
      *
      * @return ссылка на объект Ha ArrayList<Subtask>
      **/
-    public ArrayList<Subtask> getListAllSubtaskForEpicId(Integer id_epic) {
-        Epic epic = epics.get(id_epic);
+    public ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) {
+        if (idEpic == null) return null;
+        Epic epic = epics.get(idEpic);
         if (epic == null) return null;
-        HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-        return new ArrayList<>(subtasks.values());
+        ArrayList<Integer> idListSubtask = epic.getAllSubtask();
+        ArrayList<Subtask> outListSubtasks = new ArrayList<>();
+        for (int i = 0; i < idListSubtask.size(); i++) {
+            Integer isSubtask = idListSubtask.get(i);
+            Subtask subtask = subtasks.get(isSubtask);
+            outListSubtasks.add(subtask);
+        }
+        return outListSubtasks;
     }
 
     /**
      * Метод обновления Task
-     *
+     * @param newTask объект Task заменяющий старый
      * @return статус операции true/false
      */
-    public boolean updateTask(Task new_task) {
-        if (new_task == null) return false;
-        if (!tasks.containsKey(new_task.getId())) return false;
-        if (tasks.containsValue(new_task)) return false;
-        tasks.put(new_task.getId(), new_task); //положили задачу в общую коллекцию с задачами, HashMap tasks
+    public boolean updateTask(Task newTask) {
+        if (newTask == null) return false;
+        if (!tasks.containsKey(newTask.getId())) return false;
+        if (tasks.containsValue(newTask)) return false;
+        tasks.put(newTask.getId(), newTask); //положили задачу в общую коллекцию с задачами, HashMap tasks
         return true;
     }
 
@@ -177,15 +208,14 @@ public class TaskManager {
      *
      * @return статус операции true/false
      **/
-    public boolean updateSubtaskAndEpic(Subtask new_subtask) {
-        if (new_subtask == null) return false;
-        Integer id_new_subtask = new_subtask.getId(); // вытащили id new_subtask
-        Integer id_epic = new_subtask.getIdEpic();
-        Epic epic = epics.get(id_epic);
+    public boolean updateSubtaskAndEpic(Subtask newSubtask) {
+        if (newSubtask == null) return false;
+        Integer idEpic = newSubtask.getIdEpic();
+        if(idEpic==null) return false;
+        Epic epic = epics.get(idEpic);
         if (epic == null) return false;
-        HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-        //if (subtasks == null) return false;
-        subtasks.put(new_subtask.getId(), new_subtask);
+        if (subtasks.get(newSubtask.getId()) == null) return false;
+        subtasks.put(newSubtask.getId(), newSubtask);
         calcStatus(epic);
         return true;
     }
@@ -195,11 +225,12 @@ public class TaskManager {
      *
      * @return статус операции true/false*
      */
-    public boolean updateEpic(Epic new_epic) {
-        if (new_epic == null) return false;
-        if (!epics.containsKey(new_epic.getId())) return false;
-        if (epics.containsValue(new_epic)) return false;
-        epics.put(new_epic.getId(), new_epic); //положили задачу в общую коллекцию с задачами, HashMap tasks
+    public boolean updateEpic(Epic newEpic) {
+        if (newEpic == null) return false;
+        if (!epics.containsKey(newEpic.getId())) return false;
+        if (epics.containsValue(newEpic)) return false;
+        epics.put(newEpic.getId(), newEpic); //положили задачу в общую коллекцию с задачами, HashMap tasks
+        calcStatus(newEpic);
         return true;
     }
 
@@ -216,14 +247,33 @@ public class TaskManager {
     /**
      * Удаление всех Epic и их Subtask
      **/
-    public void removeAllEpic() {
+    public void removeAllEpics() {
         if (!epics.isEmpty()) {
             for (Epic epic : epics.values()) {
-                HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-                subtasks.clear();
+                ArrayList<Integer> subtasks4epic = epic.getAllSubtask();
+                subtasks4epic.clear();
             }
         }
         epics.clear();
+        subtasks.clear();
+    }
+
+    /**
+     * Удаление всех Subtask
+     *
+     * @return
+     */
+    public boolean removeAllSubtasks() {
+        if (!subtasks.isEmpty()) {
+            subtasks.clear();
+            for (Epic epic: epics.values()) {
+                ArrayList<Integer> isSubtask = epic.getAllSubtask();
+                isSubtask.clear();
+                calcStatus(epic);
+            }
+        }
+
+        return true;
     }
 
 
@@ -244,9 +294,12 @@ public class TaskManager {
      **/
     public boolean removeByIdEpic(Integer id) {
         if (epics.get(id) == null) return false;
-        Epic epic = getByIdEpic(id);
-        HashMap<Integer, Subtask> subtasks = epic.getAllSubtask();
-        subtasks.clear();
+        Epic epic = getEpicById(id);
+        ArrayList<Integer> subtasks4epic = epic.getAllSubtask();
+        for(Integer sub:subtasks4epic){
+            subtasks.remove(sub);
+        }
+        subtasks4epic.clear();
         epics.remove(id);
         return true;
     }
@@ -256,30 +309,21 @@ public class TaskManager {
      *
      * @return статус операции true/false
      **/
-    public boolean removeByIdSubtask(Integer id_subtask) {
-        if (id_subtask == null) return false;
-        // 1. По  id_subtask Вытащить id Epic для этого subtask
-        // 2. Удалить  subtask по его id
-        // 3. Проверить есть ли еще в этом Epic subtasks (не пуста ли HashMap subtasks этого Epic)
-        // 4. Если HashMap subtasks этого Epic  пустая, то удалить Epic
-        // 5. Если HashMap subtasks этого Epic  НЕ пустая, то высчитать новый статус для этого Epic
-        for (Epic epic : epics.values()) {
-            if (removeByIdSubtask(epic, id_subtask)) {
-                calcStatus(epic);
-                break;
-            }
-        }
+    public boolean removeSubtaskById(Integer idSubtask) {
+        if (idSubtask == null) return false;
+        Subtask removeSubtask=subtasks.get(idSubtask);
+        if(removeSubtask==null)return false;
+        Integer idEpic=removeSubtask.getIdEpic();
+        if(idEpic==null)return false;
+        Epic epic=epics.get(idEpic);
+        epic.getAllSubtask().remove(removeSubtask.getId());
+        subtasks.remove(removeSubtask.getId());
+        calcStatus(epic);
+
         return true;
     }
 
-    /**
-     * private Метод для удаления Subtask в конкретном Epic
-     **/
-    private boolean removeByIdSubtask(Epic epic, Integer idSubtask) {
-        HashMap<Integer, Subtask> allSubtasks = epic.getAllSubtask();
-        Subtask t = allSubtasks.remove(idSubtask);
-        return t != null;
-    }
+
 }
 
 
