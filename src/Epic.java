@@ -22,9 +22,12 @@ public class Epic extends Task {
 
     @Override
     public boolean equals(Object object) {
+        if (this == object) return true;
         if (!super.equals(object)) return false;
         if (!Objects.equals(this, object)) return false;
-        return hashCode() != object.hashCode();
+        int h1=hashCode();
+        int h2=object.hashCode();
+        return h1 == h2;
     }
 
     @Override

@@ -8,7 +8,7 @@ public class Subtask extends Task {
         super(title, description, status);  // установили параметры из конструктора родителя
     }
 
-    public Subtask(Integer id_epic,String title, String description, Status status) {
+    public Subtask(Integer id_epic, String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
         setIdEpic(id_epic);
     }
@@ -23,9 +23,10 @@ public class Subtask extends Task {
 
     @Override
     public boolean equals(Object object) {
+        if (this == object) return true;
         if (!super.equals(object)) return false;
         if (!Objects.equals(this, object)) return false;
-        return hashCode() != object.hashCode();
+        return hashCode() == object.hashCode();
     }
 
     @Override

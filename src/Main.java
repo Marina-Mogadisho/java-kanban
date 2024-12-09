@@ -1,16 +1,15 @@
 public class Main {
     public static void main(String[] args) {
-
+/*
         System.out.println();
         System.out.println(" ***  Тестирование программы  ***");
         System.out.println();
 
         // ПРОВЕРЯЕМ ДОБАВЛЕНИЕ ЗАДАЧ
-        TaskManager manager = new TaskManager();
+        TaskManager manager = Managers.getDefault();
 
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
         Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS);
-
 
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         Epic epic2 = new Epic("Epic 2", "Description epic 2");
@@ -24,10 +23,10 @@ public class Main {
         manager.addEpic(epic3);
 
         Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
-        Subtask subtask2_Epic1 = new Subtask(epic1.getId(),"Subtask 2", "Description subtask 2", Status.DONE);
+        Subtask subtask2_Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
         Subtask subtask1_Epic2 = new Subtask(epic2.getId(), "Subtask 1", "Description subtask 1", Status.IN_PROGRESS);
-        Subtask subtask1_Epic3 = new Subtask(epic3.getId(),"Subtask 1", "Description subtask 2", Status.DONE);
-        Subtask subtask2_Epic3 = new Subtask(epic3.getId(),"Subtask 2", "Description subtask 2", Status.DONE);
+        Subtask subtask1_Epic3 = new Subtask(epic3.getId(), "Subtask 1", "Description subtask 2", Status.DONE);
+        Subtask subtask2_Epic3 = new Subtask(epic3.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
 
 
         manager.addSubtask(subtask1_Epic1);
@@ -36,7 +35,7 @@ public class Main {
         manager.addSubtask(subtask1_Epic3);
         manager.addSubtask(subtask2_Epic3);
 
-
+/*
         System.out.println("добавляем Task 1 " + manager.addTask(task1));
         System.out.println("добавляем Task 2 " + manager.addTask(task2));
         System.out.println("добавляем Epic 1 " + manager.addEpic(epic1));
@@ -49,11 +48,10 @@ public class Main {
         System.out.println("добавляем Subtask 1 в Epic 3 " + manager.addSubtask(subtask2_Epic3));
 
 
-
         //  *** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***
 
         System.out.println();
-        System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ");
+        System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***");
         System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
         System.out.println(manager.getTaskById(2));
         System.out.println();
@@ -70,6 +68,17 @@ public class Main {
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
 
+        System.out.println("Получение подзадачи Subtask по идентификатору id=" + subtask2_Epic1.getId());
+        System.out.println(manager.getSubtaskById(subtask2_Epic1.getId()));
+        System.out.println();
+
+
+        System.out.println("Получение списка последних 10 вызванных задач");
+        System.out.println(manager.getHistory());
+
+
+
+
         System.out.println("Получение списка всех Subtask:");
         System.out.println(manager.getListAllSubtask());
         System.out.println();
@@ -82,7 +91,7 @@ public class Main {
         System.out.println(manager.getListAllSubtaskForEpicId(epic3.getId()));
         System.out.println();
 
-
+/*
        // *** ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ ***
 
         System.out.println("***  ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ  ***");
@@ -185,6 +194,7 @@ public class Main {
         System.out.println();
         System.out.println("Получение списка Subtask по id Epic = " + epic1.getId());
         System.out.println(manager.getListAllSubtaskForEpicId(epic1.getId()));
-
+*/
     }
 }
+
