@@ -10,19 +10,19 @@ public class Subtask extends Task {
         lockEpic = false;
     }
 
-    public Subtask(Integer id_epic, String title, String description, Status status) {
+    public Subtask(Integer idEpic, String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
         lockEpic = false;
-        setIdEpic(id_epic);
+        setIdEpic(idEpic);
     }
 
     public Integer getIdEpic() {
         return idEpic;
     }
 
-    public void setIdEpic(Integer id_epic) {
+    public void setIdEpic(Integer idEpic) {
         if (lockEpic) return;
-        this.idEpic = id_epic;
+        this.idEpic = idEpic;
         lockEpic = true;
     }
 
