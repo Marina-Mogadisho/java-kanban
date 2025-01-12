@@ -39,28 +39,28 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.NEW);
             return;
         }
-        boolean is_new = true;
+        boolean isNew = true;
         for (Integer idSubtask : idSubtasks) {
             Subtask subtask = subtasks.get(idSubtask);
             Status status = subtask.getStatus(); // достаем статус из подзадачи с помощью метода класса родителя Task
             if (status != Status.NEW) {
-                is_new = false;
+                isNew = false;
                 break;
             }
         }
-        if (is_new) {
+        if (isNew) {
             epic.setStatus(Status.NEW);
         } else {
-            boolean is_done = true;
+            boolean isDone = true;
             for (Integer idSubtask : idSubtasks) {
                 Subtask subtask = subtasks.get(idSubtask);
                 Status status = subtask.getStatus();
                 if (status != Status.DONE) {
-                    is_done = false;
+                    isDone = false;
                     break;
                 }
             }
-            if (is_done) epic.setStatus(Status.DONE);
+            if (isDone) epic.setStatus(Status.DONE);
             else {
                 epic.setStatus(Status.IN_PROGRESS);
             }
