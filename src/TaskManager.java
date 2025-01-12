@@ -42,4 +42,6 @@ public interface TaskManager {
     boolean removeByIdEpic(Integer id);
 
     boolean removeSubtaskById(Integer idSubtask);
+
+    HistoryManager getHistoryManager();
 }

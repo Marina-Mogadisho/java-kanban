@@ -82,7 +82,6 @@ class TESTManager {
         assertEquals(subtask1_Epic1, savedSubtask, "Подзадачи не совпадают.");
 
         ArrayList<Subtask> subtasks = manager.getListAllSubtask();
-        assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
         assertEquals(subtask1_Epic1, subtasks.getFirst(), "Подзадачи не совпадают.");
     }
@@ -93,7 +92,6 @@ class TESTManager {
         manager.addTask(task1);
         final Task savedTask = manager.getTaskById(task1.getId());
         final List<Task> history = manager.getHistory();
-        assertNotNull(history, "История не пустая.");
         assertEquals(1, history.size(), "История не пустая.");
         assertEquals(savedTask, history.getFirst(), "Задачи не совпадают.");
 
@@ -126,7 +124,76 @@ class TESTManager {
     void testRemoveByIdTask() {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
+        manager.getTaskById(task1.getId());
         assertTrue(manager.removeByIdTask(task1.getId()), "Задача не удалена.");
     }
 
+
+    @Test
+    void testRemoveNodeFromHistory() {
+        HistoryManager historyManager = manager.getHistoryManager();
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
+        manager.addTask(task1);
+        manager.getTaskById(task1.getId());
+        //historyManager.addHistory(task1);
+        List<Task> history0 = historyManager.getHistory();
+        assertNotEquals(history0.size(), 0, "История пустая.");
+
+        historyManager.removeFromHistory(task1.getId());
+        List<Task> history = historyManager.getHistory();
+        assertEquals(history.size(), 0, "История не пустая.");
+
+    }
+
+
+    @Test
+    void testAddNodeFromHistory() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
+        manager.addTask(task1);
+        manager.getTaskById(task1.getId());
+        //historyManager.addHistory(task1);
+        List<Task> history = historyManager.getHistory();
+        assertNotNull(history, "История пустая.");
+    }
+
+    @Test
+    void testRemoveByIdEpic() {
+        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        manager.addEpic(epic1);
+        manager.getEpicById(epic1.getId());
+        assertTrue(manager.removeByIdEpic(epic1.getId()), "Задача не удалена.");
+    }
+
+    @Test
+    void testRemoveByIdSubtask() {
+        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        manager.addEpic(epic1);
+        Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        manager.addSubtask(subtask1_Epic1);
+        manager.getSubtaskById(subtask1_Epic1.getId());
+        assertTrue(manager.removeSubtaskById(subtask1_Epic1.getId()), "Задача не удалена.");
+    }
+
+
+    @Test
+    void testClearID() {
+        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        manager.addEpic(epic1);
+
+        Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        manager.addSubtask(subtask1_Epic1);
+
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
+        manager.addTask(task1);
+
+        boolean flagTask = manager.removeByIdTask(task1.getId());
+        assertTrue(flagTask, "Задача не удалена.");
+        assertEquals(task1.getId(), 0, "ID задачи не обнулился при удалении задачи");
+
+        boolean flagEpic = manager.removeByIdEpic(epic1.getId());
+        assertTrue(flagEpic, "Эпик не удален.");
+        assertEquals(epic1.getId(), 0, "ID эпика не обнулился при удалении эпика");
+        assertEquals(subtask1_Epic1.getId(), 0, "ID Subtask не обнулился при удалении эпика");
+    }
 }

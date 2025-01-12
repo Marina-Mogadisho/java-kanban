@@ -3,13 +3,16 @@ import java.util.Objects;
 public class Subtask extends Task {
 
     private Integer idEpic;
+    private boolean lockEpic;
 
     public Subtask(String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
+        lockEpic = false;
     }
 
     public Subtask(Integer id_epic, String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
+        lockEpic = false;
         setIdEpic(id_epic);
     }
 
@@ -18,7 +21,15 @@ public class Subtask extends Task {
     }
 
     public void setIdEpic(Integer id_epic) {
+        if (lockEpic) return;
         this.idEpic = id_epic;
+        lockEpic = true;
+    }
+
+    public void clearIDForSubtask() {
+        super.clearID();
+        lockEpic = false;
+        idEpic = 0;
     }
 
     @Override

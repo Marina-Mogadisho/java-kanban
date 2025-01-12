@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-/*
+
         System.out.println();
         System.out.println(" ***  Тестирование программы  ***");
         System.out.println();
@@ -13,29 +13,56 @@ public class Main {
 
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         Epic epic2 = new Epic("Epic 2", "Description epic 2");
-        Epic epic3 = new Epic("Epic 3", "Description epic 3");
+        //Epic epic3 = new Epic("Epic 3", "Description epic 3");
 
         manager.addTask(task1);
         manager.addTask(task2);
 
         manager.addEpic(epic1);
         manager.addEpic(epic2);
-        manager.addEpic(epic3);
+       // manager.addEpic(epic3);
 
         Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
         Subtask subtask2_Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
+        Subtask subtask3_Epic1 = new Subtask(epic1.getId(), "Subtask 3", "Description subtask 3", Status.DONE);
+        manager.addSubtask(subtask1_Epic1);
+        manager.addSubtask(subtask2_Epic1);
+        manager.addSubtask(subtask3_Epic1);
+
+        System.out.println();
+        System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***");
+        manager.getTaskById(task2.getId());
+        manager.getTaskById(task1.getId());
+
+        manager.getEpicById(epic1.getId());
+        System.out.println(manager.getHistory());
+
+        manager.getSubtaskById(subtask3_Epic1.getId());
+        manager.getSubtaskById(subtask2_Epic1.getId());
+        manager.getSubtaskById(subtask1_Epic1.getId());
+
+        System.out.println("История просмотров:");
+        System.out.println(manager.getHistory());
+
+        System.out.println();
+        System.out.println("История просмотров после удаления эпика с подзадачами:");
+        manager.removeByIdEpic(epic1.getId());
+        System.out.println(manager.getHistory());
+
+        System.out.println();
+        System.out.println("История просмотров после удаления задачи:");
+        manager.removeByIdTask(task2.getId());
+        System.out.println(manager.getHistory());
+
+
+        /*
         Subtask subtask1_Epic2 = new Subtask(epic2.getId(), "Subtask 1", "Description subtask 1", Status.IN_PROGRESS);
         Subtask subtask1_Epic3 = new Subtask(epic3.getId(), "Subtask 1", "Description subtask 2", Status.DONE);
         Subtask subtask2_Epic3 = new Subtask(epic3.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
-
-
-        manager.addSubtask(subtask1_Epic1);
-        manager.addSubtask(subtask2_Epic1);
         manager.addSubtask(subtask1_Epic2);
         manager.addSubtask(subtask1_Epic3);
         manager.addSubtask(subtask2_Epic3);
 
-/*
         System.out.println("добавляем Task 1 " + manager.addTask(task1));
         System.out.println("добавляем Task 2 " + manager.addTask(task2));
         System.out.println("добавляем Epic 1 " + manager.addEpic(epic1));
@@ -47,11 +74,29 @@ public class Main {
         System.out.println("добавляем Subtask 1 в Epic 3 " + manager.addSubtask(subtask1_Epic3));
         System.out.println("добавляем Subtask 1 в Epic 3 " + manager.addSubtask(subtask2_Epic3));
 
+        //*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***
 
-        //  *** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***
+        System.out.println(manager.getHistory());
+        manager.getEpicById(epic1.getId());
+        System.out.println(manager.getHistory());
+        manager.getSubtaskById(subtask3_Epic1.getId());
+        manager.getSubtaskById(subtask2_Epic1.getId());
+        System.out.println(manager.getHistory());
 
+        manager.getTaskById(task2.getId());
         System.out.println();
-        System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***");
+        System.out.println(manager.getHistory());
+
+        manager.getEpicById(epic2.getId());
+        manager.getEpicById(epic1.getId());
+        System.out.println();
+        System.out.println(manager.getHistory());
+
+       // manager.getSubtaskById(subtask2_Epic1.getId());
+        System.out.println();
+        System.out.println("Список после удаления задачи:");
+        manager.removeByIdTask(task2.getId());
+        System.out.println(manager.getHistory());
         System.out.println("Получение задачи по идентификатору (id = " + task2.getId() + "):");
         System.out.println(manager.getTaskById(2));
         System.out.println();
@@ -75,10 +120,6 @@ public class Main {
 
         System.out.println("Получение списка последних 10 вызванных задач");
         System.out.println(manager.getHistory());
-
-
-
-
         System.out.println("Получение списка всех Subtask:");
         System.out.println(manager.getListAllSubtask());
         System.out.println();
@@ -91,7 +132,6 @@ public class Main {
         System.out.println(manager.getListAllSubtaskForEpicId(epic3.getId()));
         System.out.println();
 
-/*
        // *** ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ ***
 
         System.out.println("***  ПРОВЕРЯЕМ МЕТОДЫ ОБНОВЛЕНИЯ  ***");
@@ -125,7 +165,6 @@ public class Main {
         System.out.println();
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
-
 
         //  *** ПРОВЕРЯЕМ МЕТОДЫ УДАЛЕНИЯ
 

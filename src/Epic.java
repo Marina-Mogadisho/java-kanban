@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
-    ArrayList<Integer> idSubtask;
+    private final ArrayList<Integer> idSubtask;
 
     public Epic(String title, String description) {
         // конструктор родителя Task, который устанавливает параметры и статус
@@ -25,8 +25,8 @@ public class Epic extends Task {
         if (this == object) return true;
         if (!super.equals(object)) return false;
         if (!Objects.equals(this, object)) return false;
-        int h1=hashCode();
-        int h2=object.hashCode();
+        int h1 = hashCode();
+        int h2 = object.hashCode();
         return h1 == h2;
     }
 
