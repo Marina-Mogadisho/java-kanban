@@ -75,15 +75,15 @@ class TESTManager {
     void testAddSubtask() {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         manager.addEpic(epic1);
-        Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
-        manager.addSubtask(subtask1_Epic1);
-        final Subtask savedSubtask = manager.getSubtaskById(subtask1_Epic1.getId());
+        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        manager.addSubtask(subtask1Epic1);
+        final Subtask savedSubtask = manager.getSubtaskById(subtask1Epic1.getId());
         assertNotNull(savedSubtask, "Подзадача не найдена.");
-        assertEquals(subtask1_Epic1, savedSubtask, "Подзадачи не совпадают.");
+        assertEquals(subtask1Epic1, savedSubtask, "Подзадачи не совпадают.");
 
         ArrayList<Subtask> subtasks = manager.getListAllSubtask();
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(subtask1_Epic1, subtasks.getFirst(), "Подзадачи не совпадают.");
+        assertEquals(subtask1Epic1, subtasks.getFirst(), "Подзадачи не совпадают.");
     }
 
     @Test
@@ -115,7 +115,7 @@ class TESTManager {
     void testUpdate() {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
         assertTrue(manager.addTask(task1), "Задача не найдена.");
-        Task task2 = new Task("Task new_2", "Description task new_2", Status.DONE);
+        Task task2 = new Task("Task new2", "Description task new2", Status.DONE);
         task2.setId(task1.getId());
         assertTrue(manager.updateTask(task2), "Задача не обновлена.");
     }
@@ -180,8 +180,8 @@ class TESTManager {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         manager.addEpic(epic1);
 
-        Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
-        manager.addSubtask(subtask1_Epic1);
+        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        manager.addSubtask(subtask1Epic1);
 
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
@@ -193,6 +193,6 @@ class TESTManager {
         boolean flagEpic = manager.removeByIdEpic(epic1.getId());
         assertTrue(flagEpic, "Эпик не удален.");
         assertEquals(epic1.getId(), 0, "ID эпика не обнулился при удалении эпика");
-        assertEquals(subtask1_Epic1.getId(), 0, "ID Subtask не обнулился при удалении эпика");
+        assertEquals(subtask1Epic1.getId(), 0, "ID Subtask не обнулился при удалении эпика");
     }
 }
