@@ -44,4 +44,5 @@ public interface TaskManager {
     boolean removeSubtaskById(Integer idSubtask);
 
     HistoryManager getHistoryManager();
+
 }

@@ -30,6 +30,7 @@ public class Epic extends Task {
         return h1 == h2;
     }
 
+
     @Override
     public int hashCode() {
         return super.hashCode() * 51 + idSubtask.hashCode();

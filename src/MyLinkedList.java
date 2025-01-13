@@ -69,7 +69,6 @@ public class MyLinkedList {
 
     }
 
-
     public boolean removeTask(Task task) {
         if (task == null) return false;
         Integer idTask = task.getId();

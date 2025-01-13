@@ -3,5 +3,4 @@ public class Node {
     public Node next; // последующий узел
     public Task task;  // задача в узле
 
-
 }

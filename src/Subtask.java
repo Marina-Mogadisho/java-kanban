@@ -45,5 +45,4 @@ public class Subtask extends Task {
         return super.hashCode() * 57 + idEpic.hashCode();
     }
 
-
 }

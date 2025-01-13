@@ -175,7 +175,6 @@ class TESTManager {
         assertTrue(manager.removeSubtaskById(subtask1_Epic1.getId()), "Задача не удалена.");
     }
 
-
     @Test
     void testClearID() {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");

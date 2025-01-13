@@ -112,7 +112,6 @@ public class Main {
         System.out.println("Получение задачи Epic по идентификатору (id = " + epic1.getId() + "):");
         System.out.println(manager.getEpicById(epic1.getId()));
         System.out.println();
-
         System.out.println("Получение подзадачи Subtask по идентификатору id=" + subtask2_Epic1.getId());
         System.out.println(manager.getSubtaskById(subtask2_Epic1.getId()));
         System.out.println();
