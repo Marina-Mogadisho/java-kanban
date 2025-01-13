@@ -30,6 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     /**
      * Метод возвращает список задач из истории просмотров в списке
+     *
      * @return ArrayList<>()
      **/
     @Override

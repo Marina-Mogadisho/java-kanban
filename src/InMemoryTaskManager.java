@@ -27,6 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Integer getId() {
         return nextId++;
     }
+
     /**
      * Вычисляем статус Epic
      */

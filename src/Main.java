@@ -20,7 +20,7 @@ public class Main {
 
         manager.addEpic(epic1);
         manager.addEpic(epic2);
-       // manager.addEpic(epic3);
+        // manager.addEpic(epic3);
 
         Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
         Subtask subtask2_Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
