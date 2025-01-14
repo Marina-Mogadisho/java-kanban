@@ -20,7 +20,6 @@ public class Main {
 
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         Epic epic2 = new Epic("tasks.Epic 2", "Description epic 2");
-        //tasks.Epic epic3 = new tasks.Epic("tasks.Epic 3", "Description epic 3");
 
         manager.addTask(task1);
         manager.addTask(task2);

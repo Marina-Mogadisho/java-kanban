@@ -44,7 +44,6 @@ class TESTManager {
         assertTrue(historyList.isEmpty());
     }
 
-
     @Test
     void testAddTask() {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
