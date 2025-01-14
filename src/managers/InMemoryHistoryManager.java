@@ -1,3 +1,7 @@
+package managers;
+
+import tasks.Task;
+import util.MyLinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -11,7 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     /**
      * Метод добавления задачи(подзадачи, эпика) в историю просмотров:
-     * в созданный мною список historyList типа MyLinkedList, где создается узел и добавляется задача
+     * в созданный мною список historyList типа util.MyLinkedList, где создается узел и добавляется задача
      */
     @Override
     public void addHistory(Task task) {

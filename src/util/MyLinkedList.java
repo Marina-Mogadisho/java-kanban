@@ -1,14 +1,22 @@
+package util;
+
+import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class MyLinkedList {
     private Node lastNode;  // последний добавленный элемент цепочки с узлами
+    private Node firstNode;  // последний добавленный элемент цепочки с узлами
+
     private final HashMap<Integer, Node> mapNode; //мапа: в ключе id, а в значении узел
 
 
     public MyLinkedList() {
         this.lastNode = null;
+        this.firstNode = null;
+
         this.mapNode = new HashMap<>();
     }
 
@@ -22,11 +30,19 @@ public class MyLinkedList {
         }
     }
 
+    public Node getFirstNode() {
+        return firstNode;
+    }
+
+    public Node getLastNode() {
+        return lastNode;
+    }
+
     public void addTaskAndCreateNode(Task task) {      //при добавлении задачи создается узел
-        Node node = new Node(); //создаем объект тиа узел Node
+        Node node = new Node(); //создаем объект типа узел util.Node
         node.task = task;  // полю task в узле присваиваем значение аргумента (task), что передается на входе метода
         /*
-        При добавлении в мапу, метод put()  возвращает значение oldNode, которое
+        При добавлении в мапу, метод put()  возвращает значение oldNode, которое уже
         было по такому же ключу, а на его место записывает новое значение.
         Если такого ключа раньше не было, то метод возвращает null
         */
@@ -39,6 +55,7 @@ public class MyLinkedList {
             node.prev = null;  // поэтому поле, которое содержит ссылку на предыдущий узел равен null
             node.next = null; // следующий узел тоже null
             lastNode = node; //  а последним узлом становится пока единственный узел, который создали
+            firstNode = node; // он же является пока первым
         } else {   // если последний узел не пустой
             node.prev = lastNode; // то предыдущим узлом у созданного становится последний, который уже был в цепочке
             node.next = null; // следующий узел у созданного становится пустым
@@ -63,6 +80,7 @@ public class MyLinkedList {
         } else {
             lastNode = prevNode;
         }
+        if (lastNode == null) firstNode = null;
 
         node.next = null;
         node.prev = null;

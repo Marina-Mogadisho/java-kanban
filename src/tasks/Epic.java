@@ -1,3 +1,5 @@
+package tasks;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -5,7 +7,7 @@ public class Epic extends Task {
     private final ArrayList<Integer> idSubtask;
 
     public Epic(String title, String description) {
-        // конструктор родителя Task, который устанавливает параметры и статус
+        // конструктор родителя tasks.Task, который устанавливает параметры и статус
         super(title, description, Status.NEW);
         //subtasks = new HashMap<>(); // создаем коллекцию для подзадач, ссылку на коллекцию храним в subtasks
         idSubtask = new ArrayList<>();
