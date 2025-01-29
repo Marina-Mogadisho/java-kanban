@@ -1,24 +1,37 @@
+package tasks;
+
 import java.util.Objects;
 
 public class Subtask extends Task {
 
     private Integer idEpic;
+    private boolean lockEpic;
 
     public Subtask(String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
+        lockEpic = false;
     }
 
-    public Subtask(Integer id_epic, String title, String description, Status status) {
+    public Subtask(Integer idEpic, String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
-        setIdEpic(id_epic);
+        lockEpic = false;
+        setIdEpic(idEpic);
     }
 
     public Integer getIdEpic() {
         return idEpic;
     }
 
-    public void setIdEpic(Integer id_epic) {
-        this.idEpic = id_epic;
+    public void setIdEpic(Integer idEpic) {
+        if (lockEpic) return;
+        this.idEpic = idEpic;
+        lockEpic = true;
+    }
+
+    public void clearIDForSubtask() {
+        super.clearID();
+        lockEpic = false;
+        idEpic = 0;
     }
 
     @Override
@@ -33,6 +46,4 @@ public class Subtask extends Task {
     public int hashCode() {
         return super.hashCode() * 57 + idEpic.hashCode();
     }
-
-
 }

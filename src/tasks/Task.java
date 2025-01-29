@@ -1,3 +1,5 @@
+package tasks;
+
 import java.util.Objects;
 
 public class Task {
@@ -6,11 +8,13 @@ public class Task {
     private String description;
     private Integer id;
     private Status status;
+    private boolean lock;
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.lock = false;
     }
 
     @Override
@@ -74,7 +78,14 @@ public class Task {
      * Установка идентификатора задачи
      */
     public void setId(Integer id) {  // Метод, берет на входе номер id и приравнивает его к полю id задачи
+        if (lock) return;
         this.id = id;
+        lock = true;
+    }
+
+    public void clearID() {
+        this.lock = false;
+        this.id = 0;
     }
 
     /**
