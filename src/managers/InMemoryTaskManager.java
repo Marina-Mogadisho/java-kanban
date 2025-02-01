@@ -47,8 +47,9 @@ public class InMemoryTaskManager implements TaskManager {
     private Integer getId() {
         return nextId++;
     }
+
     public void setNextId(Integer n) {
-         if(nextId<n)nextId=n;
+        if (nextId < n) nextId = n;
     }
 
     /**
@@ -172,7 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer id) throws ManagerSaveException { //Получение по идентификатору.
         Epic epic = epics.get(id);
-        if(epic==null)return null;
+        if (epic == null) return null;
         historyManager.addHistory(epic);
         return epic;
     }
@@ -186,7 +187,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer id) throws ManagerSaveException { //Получение по идентификатору.
         Subtask subtask = subtasks.get(id);
-        if(subtask==null)return null;
+        if (subtask == null) return null;
         historyManager.addHistory(subtask);
         return subtask;
     }

@@ -33,7 +33,7 @@ public class Task {
         this.description = description;
         this.status = status;
         this.lock = false;
-        this.type=Type.TASK;
+        this.type = Type.TASK;
     }
 
 
@@ -122,6 +122,6 @@ public class Task {
     @Override
     public String toString() {
         //return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() +", description " + getDescription();
-         return getId() + "," + getType() + "," + getTitle() + "," + getStatus() +  "," + getDescription() +  ",";
+        return getId() + "," + getType() + "," + getTitle() + "," + getStatus() + "," + getDescription() + ",";
     }
 }
