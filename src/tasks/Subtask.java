@@ -10,12 +10,15 @@ public class Subtask extends Task {
     public Subtask(String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
         lockEpic = false;
+        this.setType(Type.SUBTASK);
     }
 
     public Subtask(Integer idEpic, String title, String description, Status status) {
         super(title, description, status);  // установили параметры из конструктора родителя
         lockEpic = false;
         setIdEpic(idEpic);
+        this.setType(Type.SUBTASK);
+
     }
 
     public Integer getIdEpic() {
@@ -45,5 +48,10 @@ public class Subtask extends Task {
     @Override
     public int hashCode() {
         return super.hashCode() * 57 + idEpic.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + getIdEpic();
     }
 }
