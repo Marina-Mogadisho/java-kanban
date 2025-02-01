@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
-    final private String fileName;
+    private final  String fileName;
 
     public FileBackedTaskManager(HistoryManager historyManager, String fileName) {
 //Пусть новый менеджер получает файл для автосохранения в своём конструкторе и сохраняет его в поле.
