@@ -12,6 +12,7 @@ public class Epic extends Task {
         super(title, description, Status.NEW);
         //subtasks = new HashMap<>(); // создаем коллекцию для подзадач, ссылку на коллекцию храним в subtasks
         idSubtask = new ArrayList<>();
+        this.setType(Type.EPIC);
     }
 
     public ArrayList<Integer> getAllSubtask() {

@@ -1,7 +1,4 @@
-import managers.HistoryManager;
-import managers.InMemoryHistoryManager;
-import managers.Managers;
-import managers.TaskManager;
+import managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -9,6 +6,13 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +23,19 @@ class TESTManager {
 
 
     @BeforeEach
-    public void init() {
+    public void init() throws IOException {
+        //Создает пустой файл в каталоге временных файлов по умолчанию
+        File file = File.createTempFile("filecfg", ".txt");
+        String newFile = file.getAbsolutePath();  // Возвращает строку абсолютного пути этого абстрактного пути.
+        Managers.setFileNameForSave(newFile);
         manager = Managers.getDefault();
+        manager.removeAllTasks();
+        manager.removeAllSubtasks();
+        manager.removeAllEpics();
     }
 
     @Test
-    void testManager() {
+    void testManager() throws ManagerSaveException {
         assertNotNull(manager, "Менеджер не найден.");
 
         List<Task> tasks = manager.getListAllTasks();
@@ -45,7 +56,43 @@ class TESTManager {
     }
 
     @Test
-    void testAddTask() {
+    void testSave() throws IOException {
+        HistoryManager historyManager = manager.getHistoryManager();
+
+        // Создает пустой файл в каталоге временных файлов по умолчанию
+        File file = File.createTempFile("filecfg", ".txt");
+        String newFile = file.getAbsolutePath();  // Возвращает строку абсолютного пути этого абстрактного пути.
+        FileBackedTaskManager fileTaskManager = new FileBackedTaskManager(historyManager, newFile);
+        fileTaskManager.save();  // возникнет пустой файл
+
+        boolean ex = file.exists();  //Проверяет, существует ли файл или каталог, обозначенный этим абстрактным путем.
+        assertTrue(ex, "Файл не существует");
+
+         /*
+        сохранение и загрузку пустого файла;
+        сохранение нескольких задач;
+        загрузку нескольких задач.
+         */
+
+        Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
+        fileTaskManager.addTask(task1);
+        Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
+        fileTaskManager.addEpic(epic1);
+
+        FileBackedTaskManager testFileTaskManager = new FileBackedTaskManager(historyManager, newFile);
+        testFileTaskManager.loadFromFile();
+
+        List<Task> taskList = testFileTaskManager.getListAllTasks();
+        int taskListSize = taskList.size();
+        assertEquals(1, taskListSize, "Задачи не добавлены в файл");
+
+        List<Epic> epicList = testFileTaskManager.getListAllEpic();
+        int epicListSize = epicList.size();
+        assertEquals(1, epicListSize, "Эпик не добавлен в файл");
+    }
+
+    @Test
+    void testAddTask() throws ManagerSaveException {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
         final Task savedTask = manager.getTaskById(task1.getId());
@@ -61,7 +108,7 @@ class TESTManager {
 
 
     @Test
-    void testAddEpic() {
+    void testAddEpic() throws ManagerSaveException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         manager.addEpic(epic1);
         Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 1", "Description subtask 1", Status.NEW);
@@ -79,7 +126,7 @@ class TESTManager {
 
 
     @Test
-    void testAddSubtask() {
+    void testAddSubtask() throws ManagerSaveException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         manager.addEpic(epic1);
         Subtask subtask1Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 1", "Description subtask 1", Status.NEW);
@@ -94,12 +141,12 @@ class TESTManager {
     }
 
     @Test
-    void testAddHistory() {
+    void testAddHistory() throws ManagerSaveException {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
         final Task savedTask = manager.getTaskById(task1.getId());
         final List<Task> history = manager.getHistory();
-        assertEquals(1, history.size(), "История не пустая.");
+        assertEquals(1, history.size(), "История пустая.");
         assertEquals(savedTask, history.getFirst(), "Задачи не совпадают.");
 
         assertEquals(savedTask.getStatus(), history.getFirst().getStatus(), "Статусы не совпадают.");
@@ -109,7 +156,7 @@ class TESTManager {
 
 
     @Test
-    void testTaskNotChange() {
+    void testTaskNotChange() throws ManagerSaveException {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
         final Task savedTask = manager.getTaskById(task1.getId());
@@ -119,7 +166,7 @@ class TESTManager {
     }
 
     @Test
-    void testUpdate() {
+    void testUpdate() throws ManagerSaveException {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         assertTrue(manager.addTask(task1), "Задача не найдена.");
         Task task2 = new Task("tasks.Task new2", "Description task new2", Status.DONE);
@@ -128,7 +175,7 @@ class TESTManager {
     }
 
     @Test
-    void testRemoveByIdTask() {
+    void testRemoveByIdTask() throws ManagerSaveException {
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
         manager.getTaskById(task1.getId());
@@ -137,7 +184,7 @@ class TESTManager {
 
 
     @Test
-    void testRemoveNodeFromHistory() {
+    void testRemoveNodeFromHistory() throws ManagerSaveException {
         HistoryManager historyManager = manager.getHistoryManager();
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
@@ -154,7 +201,7 @@ class TESTManager {
 
 
     @Test
-    void testAddNodeFromHistory() {
+    void testAddNodeFromHistory() throws ManagerSaveException {
         HistoryManager historyManager = new InMemoryHistoryManager();
         Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
         manager.addTask(task1);
@@ -165,7 +212,7 @@ class TESTManager {
     }
 
     @Test
-    void testRemoveByIdEpic() {
+    void testRemoveByIdEpic() throws ManagerSaveException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         manager.addEpic(epic1);
         manager.getEpicById(epic1.getId());
@@ -173,7 +220,7 @@ class TESTManager {
     }
 
     @Test
-    void testRemoveByIdSubtask() {
+    void testRemoveByIdSubtask() throws ManagerSaveException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         manager.addEpic(epic1);
         Subtask subtask1_Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 1", "Description subtask 1", Status.NEW);
@@ -183,7 +230,7 @@ class TESTManager {
     }
 
     @Test
-    void testClearID() {
+    void testClearID() throws ManagerSaveException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         manager.addEpic(epic1);
 

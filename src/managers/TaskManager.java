@@ -11,43 +11,43 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    boolean addTask(Task newTask);
+    boolean addTask(Task newTask) throws ManagerSaveException;
 
-    boolean addSubtask(Subtask newSubtask);
+    boolean addSubtask(Subtask newSubtask) throws ManagerSaveException;
 
-    boolean addEpic(Epic epic);
+    boolean addEpic(Epic epic) throws ManagerSaveException;
 
-    Task getTaskById(Integer id);
+    Task getTaskById(Integer id) throws ManagerSaveException;
 
-    Epic getEpicById(Integer id);
+    Epic getEpicById(Integer id) throws ManagerSaveException;
 
-    Subtask getSubtaskById(Integer id);
+    Subtask getSubtaskById(Integer id) throws ManagerSaveException;
 
-    ArrayList<Task> getListAllTasks();
+    ArrayList<Task> getListAllTasks() throws ManagerSaveException;
 
-    ArrayList<Epic> getListAllEpic();
+    ArrayList<Epic> getListAllEpic() throws ManagerSaveException;
 
-    ArrayList<Subtask> getListAllSubtask();
+    ArrayList<Subtask> getListAllSubtask() throws ManagerSaveException;
 
-    ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic);
+    ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException;
 
-    boolean updateTask(Task newTask);
+    boolean updateTask(Task newTask) throws ManagerSaveException;
 
-    boolean updateSubtaskAndEpic(Subtask newSubtask);
+    boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException;
 
-    boolean updateEpic(Epic newEpic);
+    boolean updateEpic(Epic newEpic) throws ManagerSaveException;
 
-    void removeAllTasks();
+    boolean removeAllTasks() throws ManagerSaveException;
 
-    void removeAllEpics();
+    boolean removeAllEpics() throws ManagerSaveException;
 
-    boolean removeAllSubtasks();
+    boolean removeAllSubtasks() throws ManagerSaveException;
 
-    boolean removeByIdTask(Integer id);
+    boolean removeByIdTask(Integer id) throws ManagerSaveException;
 
-    boolean removeByIdEpic(Integer id);
+    boolean removeByIdEpic(Integer id) throws ManagerSaveException;
 
-    boolean removeSubtaskById(Integer idSubtask);
+    boolean removeSubtaskById(Integer idSubtask) throws ManagerSaveException;
 
     HistoryManager getHistoryManager();
 }

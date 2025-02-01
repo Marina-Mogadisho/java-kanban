@@ -8,6 +8,24 @@ public class Task {
     private String description;
     private Integer id;
     private Status status;
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
+
+    private Type type;
     private boolean lock;
 
     public Task(String title, String description, Status status) {
@@ -15,7 +33,9 @@ public class Task {
         this.description = description;
         this.status = status;
         this.lock = false;
+        this.type=Type.TASK;
     }
+
 
     @Override
     public boolean equals(Object object) {
@@ -101,7 +121,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() +
-                ", description " + getDescription();
+        //return "id " + getId() + ", status " + getStatus() + ", title " + getTitle() +", description " + getDescription();
+         return getId() + "," + getType() + "," + getTitle() + "," + getStatus() +  "," + getDescription() +  ",";
     }
 }

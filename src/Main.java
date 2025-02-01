@@ -1,3 +1,4 @@
+import managers.ManagerSaveException;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
@@ -6,7 +7,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ManagerSaveException {
 
         System.out.println();
         System.out.println(" ***  Тестирование программы  ***");
@@ -15,11 +16,11 @@ public class Main {
         // ПРОВЕРЯЕМ ДОБАВЛЕНИЕ ЗАДАЧ
         TaskManager manager = Managers.getDefault();
 
-        Task task1 = new Task("tasks.Task 1", "Description task 1", Status.NEW);
-        Task task2 = new Task("tasks.Task 2", "Description task 2", Status.IN_PROGRESS);
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW);
+        Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS);
 
-        Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
-        Epic epic2 = new Epic("tasks.Epic 2", "Description epic 2");
+        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        Epic epic2 = new Epic("Epic 2", "Description epic 2");
 
         manager.addTask(task1);
         manager.addTask(task2);
@@ -28,12 +29,12 @@ public class Main {
         manager.addEpic(epic2);
         // manager.addEpic(epic3);
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 1", "Description subtask 1", Status.NEW);
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 2", "Description subtask 2", Status.DONE);
-        Subtask subtask3Epic1 = new Subtask(epic1.getId(), "tasks.Subtask 3", "Description subtask 3", Status.DONE);
+        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE);
+        Subtask subtask3Epic2 = new Subtask(epic2.getId(), "Subtask 3", "Description subtask 3", Status.DONE);
         manager.addSubtask(subtask1Epic1);
         manager.addSubtask(subtask2Epic1);
-        manager.addSubtask(subtask3Epic1);
+        manager.addSubtask(subtask3Epic2);
 
         System.out.println();
         System.out.println("*** ПРОВЕРЯЕМ ПОЛУЧЕНИЕ ЗАДАЧ ***");
@@ -43,7 +44,7 @@ public class Main {
         manager.getEpicById(epic1.getId());
         System.out.println(manager.getHistory());
 
-        manager.getSubtaskById(subtask3Epic1.getId());
+        manager.getSubtaskById(subtask3Epic2.getId());
         manager.getSubtaskById(subtask2Epic1.getId());
         manager.getSubtaskById(subtask1Epic1.getId());
 
@@ -85,7 +86,7 @@ public class Main {
         System.out.println(manager.getHistory());
         manager.getEpicById(epic1.getId());
         System.out.println(manager.getHistory());
-        manager.getSubtaskById(subtask3Epic1.getId());
+        manager.getSubtaskById(subtask1Epic2.getId());
         manager.getSubtaskById(subtask2Epic1.getId());
         System.out.println(manager.getHistory());
 

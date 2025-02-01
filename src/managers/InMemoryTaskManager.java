@@ -24,6 +24,19 @@ public class InMemoryTaskManager implements TaskManager {
         this.nextId = 1;
     }
 
+
+    protected HashMap<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    protected HashMap<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    protected HashMap<Integer, Subtask> getSubtasks() {
+        return subtasks;
+    }
+
     public HistoryManager getHistoryManager() {
         return historyManager;
     }
@@ -33,6 +46,9 @@ public class InMemoryTaskManager implements TaskManager {
      */
     private Integer getId() {
         return nextId++;
+    }
+    public void setNextId(Integer n) {
+         if(nextId<n)nextId=n;
     }
 
     /**
@@ -89,7 +105,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean addTask(Task newTask) {
+    public boolean addTask(Task newTask) throws ManagerSaveException {
         if (newTask == null) return false;
         Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id
         newTask.setId(id);  // Метод из класса tasks.Task, добавили номер id в поле объекта задачи
@@ -103,7 +119,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean addSubtask(Subtask newSubtask) {
+    public boolean addSubtask(Subtask newSubtask) throws ManagerSaveException {
         if (newSubtask == null) return false;  // если newSubtask пустой - вышли с false
         if (newSubtask.getId() != null) return false; // если у newSubtask не пустое поле Id, вышли
         if (newSubtask.getIdEpic() == null) return false; // если у newSubtask пустое поле IdEpic, вышли
@@ -125,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean addEpic(Epic epic) {
+    public boolean addEpic(Epic epic) throws ManagerSaveException {
         if (epic == null) return false;
         if (epic.getId() != null) return false;
         Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id
@@ -141,21 +157,22 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект tasks.Task
      */
     @Override
-    public Task getTaskById(Integer id) { //Получение по идентификатору.
+    public Task getTaskById(Integer id) throws ManagerSaveException { //Получение по идентификатору.
         Task task = tasks.get(id);
         historyManager.addHistory(task);
         return task;
     }
 
     /**
-     * Получение задачи tasks.Epic по идентификатору (id)
+     * Получение задачи Epic по идентификатору (id)
      *
-     * @param id идентификатор tasks.Epic
-     * @return ссылка на объект tasks.Epic
+     * @param id идентификатор Epic
+     * @return ссылка на объект Epic
      */
     @Override
-    public Epic getEpicById(Integer id) { //Получение по идентификатору.
+    public Epic getEpicById(Integer id) throws ManagerSaveException { //Получение по идентификатору.
         Epic epic = epics.get(id);
+        if(epic==null)return null;
         historyManager.addHistory(epic);
         return epic;
     }
@@ -167,8 +184,9 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект tasks.Subtask
      */
     @Override
-    public Subtask getSubtaskById(Integer id) { //Получение по идентификатору.
+    public Subtask getSubtaskById(Integer id) throws ManagerSaveException { //Получение по идентификатору.
         Subtask subtask = subtasks.get(id);
+        if(subtask==null)return null;
         historyManager.addHistory(subtask);
         return subtask;
     }
@@ -180,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект ArrayList<tasks.Task>
      **/
     @Override
-    public ArrayList<Task> getListAllTasks() {
+    public ArrayList<Task> getListAllTasks() throws ManagerSaveException {
         return new ArrayList<>(tasks.values());
     }
 
@@ -190,7 +208,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект ArrayList<tasks.Epic>
      **/
     @Override
-    public ArrayList<Epic> getListAllEpic() {
+    public ArrayList<Epic> getListAllEpic() throws ManagerSaveException {
         return new ArrayList<>(epics.values());
     }
 
@@ -200,7 +218,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект ArrayList<tasks.Subtask>
      **/
     @Override
-    public ArrayList<Subtask> getListAllSubtask() {
+    public ArrayList<Subtask> getListAllSubtask() throws ManagerSaveException {
         return new ArrayList<>(subtasks.values());
     }
 
@@ -210,7 +228,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return ссылка на объект Ha ArrayList<tasks.Subtask>
      **/
     @Override
-    public ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) {
+    public ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException {
         if (idEpic == null) return null;
         Epic epic = epics.get(idEpic);
         if (epic == null) return null;
@@ -231,7 +249,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean updateTask(Task newTask) {
+    public boolean updateTask(Task newTask) throws ManagerSaveException {
         if (newTask == null) return false;
         if (!tasks.containsKey(newTask.getId())) return false;
         if (tasks.containsValue(newTask)) return false;
@@ -245,7 +263,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      **/
     @Override
-    public boolean updateSubtaskAndEpic(Subtask newSubtask) {
+    public boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException {
         if (newSubtask == null) return false;
         Integer idEpic = newSubtask.getIdEpic();
         if (idEpic == null) return false;
@@ -263,7 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false*
      */
     @Override
-    public boolean updateEpic(Epic newEpic) {
+    public boolean updateEpic(Epic newEpic) throws ManagerSaveException {
         if (newEpic == null) return false;
         if (!epics.containsKey(newEpic.getId())) return false;
         if (epics.containsValue(newEpic)) return false;
@@ -277,7 +295,7 @@ public class InMemoryTaskManager implements TaskManager {
      * Удаление всех tasks.Task
      */
     @Override
-    public void removeAllTasks() {
+    public boolean removeAllTasks() throws ManagerSaveException {
         if (!tasks.isEmpty()) {
             for (Task task : tasks.values()) {
                 historyManager.removeFromHistory(task.getId());
@@ -285,13 +303,14 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         tasks.clear();
+        return true;
     }
 
     /**
      * Удаление всех tasks.Epic и их tasks.Subtask
      **/
     @Override
-    public void removeAllEpics() {
+    public boolean removeAllEpics() throws ManagerSaveException {
         if (!epics.isEmpty()) { // если мапа с epics не пустая
             for (Epic epic : epics.values()) {  // перебираем все эпики по очереди
                 ArrayList<Integer> subtasks4epic = epic.getAllSubtask(); // достаем из эпика список id его subtask
@@ -307,13 +326,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epics.clear();  // очищаем мапу с эпиками
         subtasks.clear(); // очищаем мапу с subtask
+        return true;
     }
 
     /**
      * Удаление всех tasks.Subtask
      */
     @Override
-    public boolean removeAllSubtasks() {
+    public boolean removeAllSubtasks() throws ManagerSaveException {
         if (!subtasks.isEmpty()) {   // если мапа с subtasks не пустая
             for (Subtask subtask : subtasks.values()) { // перебираем все subtask по очереди
                 historyManager.removeFromHistory(subtask.getId());  // удаляем текущий subtask из истории просмотров
@@ -338,7 +358,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      **/
     @Override
-    public boolean removeByIdTask(Integer id) {
+    public boolean removeByIdTask(Integer id) throws ManagerSaveException {
         Task task = tasks.remove(id);
         historyManager.removeFromHistory(id);// при удалении задачи она также удаляется из истории просмотров
         if (task != null) task.clearID();
@@ -351,7 +371,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      **/
     @Override
-    public boolean removeByIdEpic(Integer id) {
+    public boolean removeByIdEpic(Integer id) throws ManagerSaveException {
         if (epics.get(id) == null) return false;
         Epic epic = getEpicById(id);
         if (epic == null) return false;
@@ -375,7 +395,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      **/
     @Override
-    public boolean removeSubtaskById(Integer idSubtask) {
+    public boolean removeSubtaskById(Integer idSubtask) throws ManagerSaveException {
         if (idSubtask == null) return false;
         Subtask removeSubtask = subtasks.get(idSubtask);
         if (removeSubtask == null) return false;
