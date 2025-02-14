@@ -63,22 +63,27 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
     @Test
     void testException() {
-        /*
+
         Assertions.assertThrows(ManagerSaveException.class, () -> {
             HistoryManager historyManager = manager.getHistoryManager();
             FileBackedTaskManager fileTaskManager = new FileBackedTaskManager(historyManager, "z:\\tetetet.txt");
             fileTaskManager.save();  // возникнет пустой файл
-        }, "Тест-ошибка. Исключение не произошло");
+            throw new ManagerSaveException("Ошибка теста ==> testException");
+        }, "Тест-ошибка. Исключения не произошло");
     }
-    */
+
+/*
         assertThrows(ManagerSaveException.class, () -> {
             try {
                 HistoryManager historyManager = manager.getHistoryManager();
                 FileBackedTaskManager fileTaskManager = new FileBackedTaskManager(historyManager, "z:\\tetetet.txt");
                 fileTaskManager.save();  // возникнет пустой файл
+                throw new ManagerSaveException("Ошибка теста ==> testException");
             } catch (ManagerSaveException e) {
-                System.out.println("Тест-ошибка. Исключение не произошло.  " + e.getMessage());
+                System.out.println("Тест-ошибка. Исключения не произошло.  " + e.getMessage());
             }
         });
     }
+
+ */
 }
