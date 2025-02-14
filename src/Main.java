@@ -32,7 +32,6 @@ public class Main {
         // manager.addEpic(epic3);
 
         Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW, "1", "09:50 14.02.2025");
-        String s=subtask1Epic1.toString();
         Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE, "2", "09:51 14.02.2025");
         Subtask subtask3Epic2 = new Subtask(epic2.getId(), "Subtask 3", "Description subtask 3", Status.DONE, "3", "09:50 14.02.2025");
         manager.addSubtask(subtask1Epic1);
