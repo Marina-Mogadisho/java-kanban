@@ -1,12 +1,8 @@
 package tasks;
 
-import managers.ManagerSaveException;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
-import java.time.ZoneId;
 
 public class Task {
 
@@ -34,8 +30,7 @@ public class Task {
         this(title, description, status);
 
         if (duration == null || duration.length() == 0) this.duration = null;
-        else
-        if(duration.equals("0"))this.duration = null;
+        else if (duration.equals("0")) this.duration = null;
         else {
             try {
                 this.duration = Duration.ofMinutes(Long.parseLong(duration));
@@ -46,8 +41,7 @@ public class Task {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         if (startTime == null || startTime.length() == 0) this.startTime = null;
-        else
-        if (startTime.equals("0"))this.startTime = null;
+        else if (startTime.equals("0")) this.startTime = null;
         else {
             try {
                 //long seconds=Long.parseLong(startTime);
@@ -203,11 +197,10 @@ public class Task {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         String time;
 
-        if (getStartTime() != null){
+        if (getStartTime() != null) {
             time = formatter.format(getStartTime());
             //time = ""+getStartTime().getSecond();
-        }
-        else time = "0";
+        } else time = "0";
 
         String duration;
         if (getDuration() != null) duration = "" + getDuration().toMinutes();
