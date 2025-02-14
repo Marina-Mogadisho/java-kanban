@@ -1,14 +1,12 @@
 package managers;
 
-
 public class Managers {
     private static String filename4save = "saveDATA.txt";
 
     public static TaskManager getDefault() {
-        HistoryManager historyManager = getDefaultHistory();
+        //HistoryManager historyManager = getDefaultHistory();
         //return new InMemoryTaskManager(historyManager);
-        return (new FileBackedTaskManager(historyManager, filename4save)).loadFromFile();
-
+        return FileBackedTaskManager.loadFromFile(filename4save);
     }
 
     public static HistoryManager getDefaultHistory() {

@@ -29,7 +29,7 @@ public interface TaskManager {
 
     ArrayList<Subtask> getListAllSubtask() throws ManagerSaveException;
 
-    ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException;
+    List<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException;
 
     boolean updateTask(Task newTask) throws ManagerSaveException;
 
@@ -50,4 +50,6 @@ public interface TaskManager {
     boolean removeSubtaskById(Integer idSubtask) throws ManagerSaveException;
 
     HistoryManager getHistoryManager();
+
+    ArrayList<Task> getPrioritizedTasks();
 }

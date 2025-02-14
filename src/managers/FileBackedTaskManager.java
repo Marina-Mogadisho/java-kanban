@@ -5,57 +5,68 @@ import tasks.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
-    private final  String fileName;
+    private final String fileName;
 
     public FileBackedTaskManager(HistoryManager historyManager, String fileName) {
-//Пусть новый менеджер получает файл для автосохранения в своём конструкторе и сохраняет его в поле.
+//Пусть новый менеджер получает файл для авто сохранения в своём конструкторе и сохраняет его в поле.
         super(historyManager);
         this.fileName = fileName;
     }
 
 
     /**
-     * Метод восстанавливает данные менеджера из файла при запуске программы
+     * Метод loadFromFile(String fileName)
+     * 1. Создается объект  HistoryManager
+     * 2. Создается объект FileBackedTaskManager
+     * 3. Выполняется метод load
      */
-    public FileBackedTaskManager loadFromFile() {
+    public static TaskManager loadFromFile(String fileName) {
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        FileBackedTaskManager manager = new FileBackedTaskManager(historyManager, fileName);
+        manager.load();
+        return manager;
+    }
+
+    /**
+     * Метод восстанавливает данные менеджера из файла при запуске программы
+     * Метод "Десериализации"
+     */
+    public void load() {
+        /*
+        New FileReader - Создает новый объект класса FileReader, учитывая имя файла, из которого выполняется чтение (fileName).
+        И в нужной кодировке UTF_8.
+        New BufferedReader - Открывает поток и буферизует ввод данных из указанного файла.
+         */
         try (BufferedReader br = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
             while (true) {
-                String lineTask = br.readLine();
+                String lineTask = br.readLine();   // читает строку текста из потока, текст до возврата каретки (\n)
                 if (lineTask == null) break;
-                String[] split = lineTask.split(",");
+                String[] split = lineTask.split(","); //Разбивает данную строку на части, до запятой один элемент
                 //Создали массив из элементов строки
-                if (split == null) continue;
-                if (split.length < 2) continue;
-                // {id,type,name,status,description,epic}
-                if (split[1].equals("TASK")) {
-                    if (split.length < 5) continue;
-                    Integer id;
-                    try {
-                        id = Integer.parseInt(split[0]);
-                    } catch (Exception e) {
-                        id = -1;
+                if (split == null)
+                    continue;  //если массив со считанными данными пуст, возвращаемся на новый круг цикла while (true)
+                if (split.length < 2)
+                    continue;  // если в массиве только один элемент, возвращаемся на новый круг цикла while (true)
+                if (split[1].equals("TASK")) {  // если второй элемент равен слову "TASK"
+                    Integer id = checkTaskAndId(split); // проверяем, что в TASK нужное количество параметров и id>0
+                    String startTime = null;
+                    String duration = "0";
+                    if (split.length > 5) {
+                        startTime = split[5];
                     }
-                    if (id < 0) continue;
-                    setNextId(id);
-                    Task task = new Task(split[2], split[4], Status.valueOf(split[3]));
+                    if (split.length > 6) {
+                        duration = split[6];
+                    }
+                    Task task = new Task(split[2], split[4], Status.valueOf(split[3]), duration, startTime);
                     task.setId(id); // добавили id в task
                     getTasks().put(id, task);
-
-
                 } else if (split[1].equals("EPIC")) {
-                    if (split.length < 5) continue;
-                    Integer id;
-                    try {
-                        id = Integer.parseInt(split[0]);
-                    } catch (Exception e) {
-                        id = -1;
-                    }
-                    if (id < 0) continue;
-                    setNextId(id);
+                    Integer id = checkTaskAndId(split);// проверяем, что в EPIC нужное количество параметров и id>0
                     Epic epic = new Epic(split[2], split[4]);
                     epic.setId(id);
                     getEpics().put(id, epic);
@@ -66,7 +77,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     Integer idEpic;
                     try {
                         id = Integer.parseInt(split[0]);
-                        idEpic = Integer.parseInt(split[5]);
+                        idEpic = Integer.parseInt(split[7]);
                     } catch (Exception e) {
                         id = -1;
                         idEpic = -1;
@@ -75,7 +86,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     setNextId(id);
                     setNextId(idEpic);
                     //public Subtask(Integer idEpic, String title, String description, Status status)
-                    Subtask subtask = new Subtask(idEpic, split[2], split[4], Status.valueOf(split[3]));
+                    String startTime = null;
+                    String duration = "0";
+                    if (split.length > 5) {
+                        startTime = split[5];
+                    }
+                    if (split.length > 6) {
+                        duration = split[6];
+                    }
+                    Subtask subtask = new Subtask(idEpic, split[2], split[4], Status.valueOf(split[3]), duration, startTime);
                     subtask.setId(id);
                     getSubtasks().put(id, subtask);
                 }
@@ -83,17 +102,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             System.out.println("Произошла ошибка во время чтения файла.");
         }
-        return this;
     }
 
+    /**
+     * Метод проверяет, что скаченная из файла строка имеет длину не менее 5 элементов, и что id не меньше 0
+     * подходит для проверки "TASK" и "EPIC", так как у них 5 параметров
+     * {id, type, name, status, description}
+     */
+    private Integer checkTaskAndId(String[] split) {
+        Integer id = 0;
+        try {
+            // в"TASK" и "EPIC" должно быть 5 параметров, значит и длина д.б. = 5
+            if (split.length < 5) {
+                throw new ManagerLoadException("При считывании из файла не хватает параметров задачи");
+            }
+            // если в параметрах не задан id
+            id = Integer.parseInt(split[0]);  // внутри parseInt() генерируется исключение throw new NumberFormatException
+            if (id < 0) {
+                throw new ManagerLoadException("При считывании из файла не указан номер id");
+            }
+        } catch (Exception e) {
+            System.out.println("Произошла ошибка во время чтения файла.");
+        }
+        setNextId(id);
+        return id;
+    }
 
     /**
      * Метод будет сохранять текущее состояние менеджера (список задач с параметрами)в указанный файл.
+     * Метод СЕРИАЛИЗАЦИИ
      */
     public void save() throws ManagerSaveException {
         //создаем объект типа FileWriter, чтобы можно было писать в файл, имя которого указано и в кодировке UTF_8
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, StandardCharsets.UTF_8))) {
-            bw.write("id,type,name,status,description,epic");
+            bw.write("id,type,name,status,description,startTime,duration,epic");
             bw.newLine();
 
             for (Task task : getTasks().values()) {
@@ -136,8 +178,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public boolean addEpic(Epic epic) throws ManagerSaveException {
-        if (!super.addEpic(epic)) return false;
+    public boolean addEpic(Epic newEpic) throws ManagerSaveException {
+        if (!super.addEpic(newEpic)) return false;
         save();
         return true;
     }
@@ -193,8 +235,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException {
-        ArrayList<Subtask> allSubtaskForEpicId = super.getListAllSubtaskForEpicId(idEpic);
+    public List<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException {
+        List<Subtask> allSubtaskForEpicId = super.getListAllSubtaskForEpicId(idEpic);
         if (allSubtaskForEpicId == null) return null;
         save();
         return allSubtaskForEpicId;
@@ -262,6 +304,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
         return true;
     }
-
-
 }
