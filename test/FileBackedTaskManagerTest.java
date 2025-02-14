@@ -6,17 +6,13 @@ import tasks.Epic;
 import tasks.Status;
 import tasks.Task;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
-    //TaskManager manager;
 
     @BeforeEach
     public void init() throws IOException {
@@ -37,8 +33,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         // Создает пустой файл в каталоге временных файлов по умолчанию
         File file = File.createTempFile("filecfg", ".txt");
         String newFile = file.getAbsolutePath();  // Возвращает строку абсолютного пути этого абстрактного пути.
-        //todo
-        //newFile ="FILE$TEST.txt";
         FileBackedTaskManager fileTaskManager = new FileBackedTaskManager(historyManager, newFile);
         fileTaskManager.save();  // возникнет пустой файл
 
