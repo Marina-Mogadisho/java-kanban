@@ -150,21 +150,10 @@ public class InMemoryTaskManager implements TaskManager {
      * @return - если время окончания первого таска ПОСЛЕ времени начала второго таска, то true
      */
     public boolean intersectionTask(Task newTask) {
-        if (newTask.getStartTime() == null) return true;
-        for (Task task : tasks.values()) {
-            if (task.intersection(newTask)) return true;
-        }
-        return false;
-    }
-
-    /**
-     * Метод проверки пересечения (intersection) подзадач по времени выполнения
-     *
-     * @return - если время окончания первого таска ПОСЛЕ времени начала второго таска, то true
-     */
-    public boolean intersectionSubtask(Subtask newSubtask) {
-        for (Subtask subtask : subtasks.values()) {
-            if (subtask.intersection(newSubtask)) return true;
+        if (newTask.getStartTime() == null || newTask.getEndTime() == null) return false;
+        for (Task task : tasksTreeSet) {
+            if (task.getEndTime() == null || task.getStartTime() == null) return false;
+            if (task.getEndTime().isAfter(newTask.getStartTime())) return true;// есть пересечение
         }
         return false;
     }
@@ -197,7 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (newSubtask.getIdEpic() == null) return false; // если у newSubtask пустое поле IdEpic, вышли
         Integer idEpic = newSubtask.getIdEpic(); //вытащили из newSubtask поле idEpic
         if (!epics.containsKey(idEpic)) return false; // если нет такого idEpic в коллекции Epic, вышли
-        if (intersectionSubtask(newSubtask))
+        if (intersectionTask(newSubtask))
             return false;  // если newSubtask пересекается по времени с другой подзадачей
         Integer id = getId(); // Метод, увеличили счетчик newId на 1 и присвоили id
         newSubtask.setId(id); // Метод из класса Task, добавили номер id в поле объекта задачи
@@ -375,11 +364,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.isEmpty()) {
             for (Task task : tasks.values()) {
                 historyManager.removeFromHistory(task.getId());
+                tasksTreeSet.remove(task);
                 task.clearID();
             }
         }
         tasks.clear();
-        tasksTreeSet.clear();
         return true;
     }
 

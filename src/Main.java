@@ -5,7 +5,9 @@ import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+import util.UtilTime;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class Main {
@@ -18,8 +20,10 @@ public class Main {
         // ПРОВЕРЯЕМ ДОБАВЛЕНИЕ ЗАДАЧ
         TaskManager manager = Managers.getDefault();
 
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW, "10", "10:50 14.02.2025");
-        Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS, "15", "11:50 14.02.2025");
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+        Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS,
+                UtilTime.stringOfDuration("15"), UtilTime.stringOfLocalTime("11:50 14.02.2025"));
 
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         Epic epic2 = new Epic("Epic 2", "Description epic 2");
@@ -31,9 +35,12 @@ public class Main {
         manager.addEpic(epic2);
         // manager.addEpic(epic3);
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW, "1", "09:50 14.02.2025");
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2", Status.DONE, "2", "09:51 14.02.2025");
-        Subtask subtask3Epic2 = new Subtask(epic2.getId(), "Subtask 3", "Description subtask 3", Status.DONE, "3", "09:50 14.02.2025");
+        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                Status.NEW,  UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
+        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 2",
+                Status.DONE,  UtilTime.stringOfDuration("2"), UtilTime.stringOfLocalTime("09:51 16.02.2025"));
+        Subtask subtask3Epic2 = new Subtask(epic2.getId(), "Subtask 3", "Description subtask 3",
+                Status.DONE,  UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("09:50 17.02.2025"));
         manager.addSubtask(subtask1Epic1);
         manager.addSubtask(subtask2Epic1);
         manager.addSubtask(subtask3Epic2);
@@ -78,7 +85,7 @@ public class Main {
 
         manager.removeAllEpics();
         manager.removeAllTasks();
-        manager.removeAllTasks();
+        manager.removeAllSubtasks();
 
         /*
         tasks.Subtask subtask1_Epic2 = new tasks.Subtask(epic2.getId(), "tasks.Subtask 1", "Description subtask 1", tasks.Status.IN_PROGRESS);

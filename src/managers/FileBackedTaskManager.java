@@ -1,6 +1,7 @@
 package managers;
 
 import tasks.*;
+import util.UtilTime;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +63,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     if (split.length > 6) {
                         duration = split[6];
                     }
-                    Task task = new Task(split[2], split[4], Status.valueOf(split[3]), duration, startTime);
+                    Task task = new Task(split[2], split[4], Status.valueOf(split[3]), UtilTime.stringOfDuration(duration), UtilTime.stringOfLocalTime(startTime));
                     task.setId(id); // добавили id в task
                     getTasks().put(id, task);
                 } else if (split[1].equals("EPIC")) {
@@ -94,7 +95,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     if (split.length > 6) {
                         duration = split[6];
                     }
-                    Subtask subtask = new Subtask(idEpic, split[2], split[4], Status.valueOf(split[3]), duration, startTime);
+                    Subtask subtask = new Subtask(idEpic, split[2], split[4], Status.valueOf(split[3]),
+                            UtilTime.stringOfDuration(duration), UtilTime.stringOfLocalTime(startTime));
                     subtask.setId(id);
                     getSubtasks().put(id, subtask);
                 }

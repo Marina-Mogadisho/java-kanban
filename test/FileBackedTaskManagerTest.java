@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Task;
+import util.UtilTime;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +45,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         сохранение нескольких задач;
         загрузку нескольких задач.
          */
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW, "10", "10:50 14.02.2025");
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         fileTaskManager.addTask(task1);
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
         fileTaskManager.addEpic(epic1);

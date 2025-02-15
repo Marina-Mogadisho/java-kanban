@@ -4,6 +4,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import util.*;
+
 public class Task {
 
     private String title;
@@ -14,7 +16,7 @@ public class Task {
     private LocalDateTime startTime; // дата и время, когда предполагается приступить к выполнению задачи.
     private Type type;
     private boolean lock;
-    private static String format = "HH:mm dd.MM.yyyy";
+    private static String format = UtilTime.format;
 
     protected Task(String title, String description, Status status) {
         this.title = title;
@@ -26,32 +28,11 @@ public class Task {
         this.startTime = null;
     }
 
-    public Task(String title, String description, Status status, String duration, String startTime) {
+    public Task(String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this(title, description, status);
 
-        if (duration == null || duration.length() == 0) this.duration = null;
-        else if (duration.equals("0")) this.duration = null;
-        else {
-            try {
-                this.duration = Duration.ofMinutes(Long.parseLong(duration));
-            } catch (Exception e) {
-                this.duration = null;
-            }
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-        if (startTime == null || startTime.length() == 0) this.startTime = null;
-        else if (startTime.equals("0")) this.startTime = null;
-        else {
-            try {
-                //long seconds=Long.parseLong(startTime);
-                //this.startTime=LocalDateTime.ofEpochSecond(seconds, 0, ZonedDateTime.now().getOffset());
-                this.startTime = LocalDateTime.parse(startTime, formatter);
-
-            } catch (Exception e) {
-                this.startTime = null;
-            }
-        }
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     /**
@@ -103,21 +84,6 @@ public class Task {
     }
 
     public void setEndTime(LocalDateTime time) {
-    }
-
-    /**
-     * Метод проверки пересечения (intersection) задач по времени выполнения
-     *
-     * @return - если время окончания первого таска ПОСЛЕ времени начала второго таска, то true
-     */
-    public boolean intersection(Task t1) {
-        if (getEndTime() == null || t1.getStartTime() == null) return false;
-        if (getEndTime().isAfter(t1.getStartTime())) return true; // есть пересечение
-        return false; // нет пересечения
-    }
-
-    public boolean isLock() {
-        return lock;
     }
 
     public void setLock(boolean lock) {

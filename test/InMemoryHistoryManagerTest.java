@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
+import util.UtilTime;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,9 +22,11 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
 
     @Test
     void testAddHistory() throws ManagerSaveException {
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW, "10", "10:50 14.02.2025");
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         manager.addTask(task1);
-        Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS, "15", "11:55 14.02.2025");
+        Task task2 = new Task("Task 2", "Description task 2", Status.IN_PROGRESS,
+                UtilTime.stringOfDuration("15"), UtilTime.stringOfLocalTime("11:55 14.02.2025"));
         manager.addTask(task2);
         final Task savedTask = manager.getTaskById(task1.getId());
         final List<Task> history = manager.getHistory();
@@ -38,7 +41,8 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
     @Test
     void testRemoveNodeFromHistory() throws ManagerSaveException {
         HistoryManager historyManager = manager.getHistoryManager();
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW, "10", "10:50 14.02.2025");
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         manager.addTask(task1);
         manager.getTaskById(task1.getId());
         List<Task> history0 = historyManager.getHistory();
@@ -52,7 +56,8 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
     @Test
     void testAddNodeFromHistory() throws ManagerSaveException {
         HistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW, "10", "10:50 14.02.2025");
+        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         manager.addTask(task1);
         manager.getTaskById(task1.getId());
         List<Task> history = historyManager.getHistory();

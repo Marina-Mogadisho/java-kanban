@@ -52,4 +52,6 @@ public interface TaskManager {
     HistoryManager getHistoryManager();
 
     ArrayList<Task> getPrioritizedTasks();
+
+    boolean intersectionTask(Task newTask);
 }
