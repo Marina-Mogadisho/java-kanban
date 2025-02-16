@@ -149,11 +149,18 @@ public class InMemoryTaskManager implements TaskManager {
      *
      * @return - если время окончания первого таска ПОСЛЕ времени начала второго таска, то true
      */
-    public boolean intersectionTask(Task newTask) {
+    public boolean intersectionTask(Task newTask) throws ManagerSaveException {
         if (newTask.getStartTime() == null || newTask.getEndTime() == null) return false;
         for (Task task : tasksTreeSet) {
             if (task.getEndTime() == null || task.getStartTime() == null) return false;
-            if (task.getEndTime().isAfter(newTask.getStartTime())) return true;// есть пересечение
+            LocalDateTime endTimeTask2 = task.getEndTime();
+            LocalDateTime startTimeNewTask = newTask.getStartTime();
+            LocalDateTime startTimeTask2 = task.getStartTime();
+            LocalDateTime endTimeNewTask = newTask.getEndTime();
+            if (startTimeNewTask.isAfter(endTimeTask2) || startTimeTask2.isAfter(endTimeNewTask))
+                continue; // нет пересечение
+            return true;//  есть пересечение
+
         }
         return false;
     }
@@ -186,6 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (newSubtask.getIdEpic() == null) return false; // если у newSubtask пустое поле IdEpic, вышли
         Integer idEpic = newSubtask.getIdEpic(); //вытащили из newSubtask поле idEpic
         if (!epics.containsKey(idEpic)) return false; // если нет такого idEpic в коллекции Epic, вышли
+
         if (intersectionTask(newSubtask))
             return false;  // если newSubtask пересекается по времени с другой подзадачей
         Integer id = getId(); // Метод, увеличили счетчик newId на 1 и присвоили id

@@ -205,126 +205,279 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(subtask1Epic1.getId(), 0, "ID tasks.Subtask не обнулился при удалении эпика");
     }
 
-    /*  ТЕСТ на пересечение №1.
+    /*  ТЕСТ на пересечение №1. addSubtask
             |------|
                |--------|
     */
     @Test
-    void intersectionTaskTest1() throws ManagerSaveException {
+    void intersectionTaskTest1() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
-                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
-        manager.addTask(task1);
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
-        manager.addEpic(epic1);
-
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
-        manager.addSubtask(subtask1Epic1);
-        assertTrue(manager.intersectionTask(subtask1Epic1), "В тесте нет пересечения задач по времени.");
-
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("11:05 14.02.2025"));
-
-        manager.updateTask(subtask2Epic1);
-        assertFalse(manager.intersectionTask(subtask2Epic1), "В тесте нет пересечения задач по времени.");
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            if (!manager.addSubtask(subtask1Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - addSubtask. Тест 1. ==>  ");
+        });
     }
 
-    /*  ТЕСТ на пересечение №2.
+    /*  ТЕСТ на пересечение №1.1.Update
+            |------|
+               |--------|
+    */
+    @Test
+    void intersectionUpdateTaskTest1() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            subtask2Epic1.setId(subtask1Epic1.getId());
+
+            if (!manager.updateTask(subtask2Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - updateTask.   Тест 1. ==>  ");
+        });
+    }
+
+    /*  ТЕСТ на пересечение №2. addSubtask
              |------|
         |--------|
     */
     @Test
-    void intersectionTaskTest2() throws ManagerSaveException {
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
-                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
-        manager.addTask(task1);
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
-        manager.addEpic(epic1);
+    void intersectionTaskTest2() {
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:40 14.02.2025"));
-        manager.addSubtask(subtask1Epic1);
-        assertTrue(manager.intersectionTask(subtask1Epic1), "В тесте нет пересечения задач по времени.");
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("11:05 14.02.2025"));
-
-        manager.updateTask(subtask2Epic1);
-        assertFalse(manager.intersectionTask(subtask2Epic1), "В тесте нет пересечения задач по времени.");
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:40 14.02.2025"));
+            if (!manager.addSubtask(subtask1Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - addSubtask. Тест 2. ==>  ");
+        });
     }
 
+    /*  ТЕСТ на пересечение №2.1.Update
+             |------|
+        |--------|
+    */
+    @Test
+    void intersectionUpdateTaskTest2() {
 
-    /*  ТЕСТ на пересечение №3.
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:40 15.02.2025"));
+            manager.addSubtask(subtask1Epic1);
+
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:40 14.02.2025"));
+            subtask2Epic1.setId(subtask1Epic1.getId());
+
+            if (!manager.updateTask(subtask2Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - updateTask.  Тест 2.1. ==>  ");
+        });
+    }
+
+    /*  ТЕСТ на пересечение №3. addSubtask
         |------|
           |--|
     */
     @Test
-    void intersectionTaskTest3() throws ManagerSaveException {
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
-                UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
-        manager.addTask(task1);
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
-        manager.addEpic(epic1);
+    void intersectionTaskTest3() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
-        manager.addSubtask(subtask1Epic1);
-        assertTrue(manager.intersectionTask(subtask1Epic1), "В тесте нет пересечения задач по времени.");
-
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("11:05 14.02.2025"));
-
-        manager.updateTask(subtask2Epic1);
-        assertFalse(manager.intersectionTask(subtask2Epic1), "В тесте нет пересечения задач по времени.");
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            if (!manager.addSubtask(subtask1Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - addSubtask. Тест 3. ==>  ");
+        });
     }
 
+    /*  ТЕСТ на пересечение №3.1.Update
+        |------|
+          |--|
+    */
+    @Test
+    void intersectionUpdateTaskTest3() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-    /*  ТЕСТ на пересечение №4.
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("2"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            subtask2Epic1.setId(subtask1Epic1.getId());
+
+            if (!manager.updateTask(subtask2Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - updateTask. Тест 3.1. ==>  ");
+        });
+    }
+
+    /*  ТЕСТ на пересечение №4. addSubtask
           |--|
         |------|
     */
     @Test
-    void intersectionTaskTest4() throws ManagerSaveException {
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
-                UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
-        manager.addTask(task1);
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
-        manager.addEpic(epic1);
+    void intersectionTaskTest4() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
-        manager.addSubtask(subtask1Epic1);
-        assertTrue(manager.intersectionTask(subtask1Epic1), "В тесте нет пересечения задач по времени.");
-
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("11:05 14.02.2025"));
-
-        manager.updateTask(subtask2Epic1);
-        assertFalse(manager.intersectionTask(subtask2Epic1), "В тесте нет пересечения задач по времени.");
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            if (!manager.addSubtask(subtask1Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - addSubtask. Тест 4. ==>  ");
+        });
     }
 
-    /*  ТЕСТ на пересечение №5.
+    /*  ТЕСТ на пересечение №4.1.Update
+          |--|
+        |------|
+    */
+    @Test
+    void intersectionUpdateTaskTest4() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 15.02.2025"));
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("20"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
+            subtask2Epic1.setId(subtask1Epic1.getId());
+
+            if (!manager.updateTask(subtask2Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - updateTask. Тест 4.1. ==>  ");
+        });
+    }
+
+    /*  ТЕСТ на пересечение №5. addSubtask  Время и дата одинаковые.
         |------|
         |------|
     */
     @Test
-    void intersectionTaskTest5() throws ManagerSaveException {
-        Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
-                UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
-        manager.addTask(task1);
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
-        manager.addEpic(epic1);
+    void intersectionTaskTest5() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
 
-        Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
-        manager.addSubtask(subtask1Epic1);
-        assertTrue(manager.intersectionTask(subtask1Epic1), "В тесте нет пересечения задач по времени.");
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
 
-        Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
-                Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("11:05 14.02.2025"));
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addSubtask(subtask1Epic1);
+            if (!manager.addSubtask(subtask1Epic1))
+                throw new ManagerSaveException("Исключение поймано в методе - addSubtask. Тест 5. ==>  ");
+        });
+    }
 
-        manager.updateTask(subtask2Epic1);
-        assertFalse(manager.intersectionTask(subtask2Epic1), "В тесте нет пересечения задач по времени.");
+    /*  ТЕСТ на пересечение №5.1. Update.  Время и дата одинаковые.
+        |------|
+        |------|
+    */
+    @Test
+    void intersectionUpdateTaskTest5() {
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addTask(task1);
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
+            manager.addSubtask(subtask1Epic1);
+
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            subtask2Epic1.setId(subtask1Epic1.getId());
+            if (!manager.updateTask(subtask2Epic1))
+                throw new ManagerSaveException("Исключение на пересечение времени.");
+
+        });
+    }
+
+
+    /*  ТЕСТ на пересечение №6. addSubtask Время одинаковое, но даты разные.
+        |------|
+        |------|
+    */
+    @Test
+    void intersectionTaskTest6() {
+
+        assertDoesNotThrow(() -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
+            manager.addTask(task1);
+
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+            manager.addSubtask(subtask1Epic1);
+        });
+    }
+
+    /*  ТЕСТ на пересечение №6.1. Update.  Время одинаковое, но даты разные.
+        |------|
+        |------|
+    */
+    @Test
+    void intersectionUpdateTaskTest6() {
+
+        assertDoesNotThrow(() -> {
+            Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
+                    UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
+            manager.addTask(task1);
+
+            Epic epic1 = new Epic("Epic 1", "Description epic 1");
+            manager.addEpic(epic1);
+            Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 16.02.2025"));
+            Subtask subtask2Epic1 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 1",
+                    Status.NEW, UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+
+            subtask2Epic1.setId(subtask1Epic1.getId());
+            manager.updateTask(subtask2Epic1);
+        });
     }
 }
+
