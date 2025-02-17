@@ -21,7 +21,7 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
     }
 
     @Test
-    void testAddHistory() throws ManagerSaveException {
+    void testAddHistory() throws ManagerSaveException, IntersectionTaskException {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         manager.addTask(task1);
@@ -39,7 +39,7 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
     }
 
     @Test
-    void testRemoveNodeFromHistory() throws ManagerSaveException {
+    void testRemoveNodeFromHistory() throws ManagerSaveException, IntersectionTaskException {
         HistoryManager historyManager = manager.getHistoryManager();
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
@@ -54,7 +54,7 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskMana
     }
 
     @Test
-    void testAddNodeFromHistory() throws ManagerSaveException {
+    void testAddNodeFromHistory() throws ManagerSaveException, IntersectionTaskException {
         HistoryManager historyManager = new InMemoryHistoryManager();
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));

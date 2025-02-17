@@ -28,7 +28,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
 
     @Test
-    void testSave() throws IOException {
+    void testSave() throws IOException,IntersectionTaskException {
         HistoryManager historyManager = manager.getHistoryManager();
 
         // Создает пустой файл в каталоге временных файлов по умолчанию

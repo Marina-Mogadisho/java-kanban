@@ -166,14 +166,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     @Override
-    public boolean addTask(Task newTask) throws ManagerSaveException {
+    public boolean addTask(Task newTask) throws ManagerSaveException, IntersectionTaskException {
         if (!super.addTask(newTask)) return false;
         save();
         return true;
     }
 
     @Override
-    public boolean addSubtask(Subtask newSubtask) throws ManagerSaveException {
+    public boolean addSubtask(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException {
         if (!super.addSubtask(newSubtask)) return false;
         save();
         return true;
@@ -245,14 +245,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public boolean updateTask(Task newTask) throws ManagerSaveException {
+    public boolean updateTask(Task newTask) throws ManagerSaveException, IntersectionTaskException {
         if (!super.updateTask(newTask)) return false;
         save();
         return true;
     }
 
     @Override
-    public boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException {
+    public boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException {
         if (!super.updateSubtaskAndEpic(newSubtask)) return false;
         save();
         return true;

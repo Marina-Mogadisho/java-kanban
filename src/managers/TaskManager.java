@@ -11,9 +11,9 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    boolean addTask(Task newTask) throws ManagerSaveException;
+    boolean addTask(Task newTask) throws ManagerSaveException, IntersectionTaskException;
 
-    boolean addSubtask(Subtask newSubtask) throws ManagerSaveException;
+    boolean addSubtask(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException;
 
     boolean addEpic(Epic epic) throws ManagerSaveException;
 
@@ -31,9 +31,9 @@ public interface TaskManager {
 
     List<Subtask> getListAllSubtaskForEpicId(Integer idEpic) throws ManagerSaveException;
 
-    boolean updateTask(Task newTask) throws ManagerSaveException;
+    boolean updateTask(Task newTask) throws ManagerSaveException, IntersectionTaskException;
 
-    boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException;
+    boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException;
 
     boolean updateEpic(Epic newEpic) throws ManagerSaveException;
 

@@ -1,3 +1,4 @@
+import managers.IntersectionTaskException;
 import managers.ManagerSaveException;
 import managers.Managers;
 import managers.TaskManager;
@@ -10,7 +11,7 @@ import util.UtilTime;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) throws ManagerSaveException {
+    public static void main(String[] args) throws ManagerSaveException, IntersectionTaskException {
 
         System.out.println();
         System.out.println(" ***  Тестирование программы  ***");

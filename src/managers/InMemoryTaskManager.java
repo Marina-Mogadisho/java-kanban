@@ -149,7 +149,7 @@ public class InMemoryTaskManager implements TaskManager {
      *
      * @return - если время окончания первого таска ПОСЛЕ времени начала второго таска, то true
      */
-    public boolean intersectionTask(Task newTask) throws ManagerSaveException {
+    public boolean intersectionTask(Task newTask) throws IntersectionTaskException {
         if (newTask.getStartTime() == null || newTask.getEndTime() == null) return false;
         for (Task task : tasksTreeSet) {
             if (task.getEndTime() == null || task.getStartTime() == null) return false;
@@ -159,8 +159,7 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime endTimeNewTask = newTask.getEndTime();
             if (startTimeNewTask.isAfter(endTimeTask2) || startTimeTask2.isAfter(endTimeNewTask))
                 continue; // нет пересечение
-            return true;//  есть пересечение
-
+            throw new IntersectionTaskException("Есть пересечение задач по времени");//  есть пересечение
         }
         return false;
     }
@@ -171,7 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean addTask(Task newTask) throws ManagerSaveException {
+    public boolean addTask(Task newTask) throws ManagerSaveException, IntersectionTaskException {
         if (newTask == null) return false;
         if (intersectionTask(newTask)) return false; // если newTask пересекается по времени с другой подзадачей
         Integer id = getId();  // Метод, увеличили счетчик newId на 1 и присвоили id
@@ -187,7 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean addSubtask(Subtask newSubtask) throws ManagerSaveException {
+    public boolean addSubtask(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException {
         if (newSubtask == null) return false;  // если newSubtask пустой - вышли с false
         if (newSubtask.getId() != null) return false; // если у newSubtask не пустое поле Id, вышли
         if (newSubtask.getIdEpic() == null) return false; // если у newSubtask пустое поле IdEpic, вышли
@@ -317,10 +316,11 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      */
     @Override
-    public boolean updateTask(Task newTask) throws ManagerSaveException {
+    public boolean updateTask(Task newTask) throws ManagerSaveException, IntersectionTaskException {
         if (newTask == null) return false;
         if (!tasks.containsKey(newTask.getId())) return false;
         if (tasks.containsValue(newTask)) return false;
+        intersectionTask(newTask);
         Task task = tasks.put(newTask.getId(), newTask); //положили задачу в общую коллекцию с задачами, HashMap tasks
         if (task != null) tasksTreeSet.remove(task);
         tasksTreeSet.add(newTask);
@@ -333,13 +333,14 @@ public class InMemoryTaskManager implements TaskManager {
      * @return статус операции true/false
      **/
     @Override
-    public boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException {
+    public boolean updateSubtaskAndEpic(Subtask newSubtask) throws ManagerSaveException, IntersectionTaskException {
         if (newSubtask == null) return false;
         Integer idEpic = newSubtask.getIdEpic();
         if (idEpic == null) return false;
         Epic epic = epics.get(idEpic);
         if (epic == null) return false;
         if (subtasks.get(newSubtask.getId()) == null) return false;
+        intersectionTask(newSubtask);
         Subtask subtask = subtasks.put(newSubtask.getId(), newSubtask);
         calcStatus(epic);
         calcTimeForEpic(epic);
