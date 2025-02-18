@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -7,18 +9,11 @@ public class Subtask extends Task {
     private Integer idEpic;
     private boolean lockEpic;
 
-    public Subtask(String title, String description, Status status) {
-        super(title, description, status);  // установили параметры из конструктора родителя
-        lockEpic = false;
-        this.setType(Type.SUBTASK);
-    }
-
-    public Subtask(Integer idEpic, String title, String description, Status status) {
-        super(title, description, status);  // установили параметры из конструктора родителя
+    public Subtask(Integer idEpic, String title, String description, Status status, Duration duration, LocalDateTime startTime) {
+        super(title, description, status, duration, startTime);  // установили параметры из конструктора родителя
         lockEpic = false;
         setIdEpic(idEpic);
         this.setType(Type.SUBTASK);
-
     }
 
     public Integer getIdEpic() {
@@ -52,6 +47,6 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + getIdEpic();
+        return super.toString() + "," + getIdEpic();
     }
 }

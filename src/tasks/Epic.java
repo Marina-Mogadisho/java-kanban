@@ -1,18 +1,32 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
 
     private final ArrayList<Integer> idSubtask;
+    // дата и время, когда предполагается закончить выполнение задачи, по времени последнего Subtask.
+    private LocalDateTime endTime;
+    //private Duration duration;
 
     public Epic(String title, String description) {
         // конструктор родителя tasks.Task, который устанавливает параметры и статус
         super(title, description, Status.NEW);
-        //subtasks = new HashMap<>(); // создаем коллекцию для подзадач, ссылку на коллекцию храним в subtasks
-        idSubtask = new ArrayList<>();
+        this.idSubtask = new ArrayList<>();
         this.setType(Type.EPIC);
+        this.endTime = null;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    @Override
+    public void setEndTime(LocalDateTime time) {
+        endTime = time;
     }
 
     public ArrayList<Integer> getAllSubtask() {

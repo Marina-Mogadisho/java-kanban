@@ -10,8 +10,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final MyLinkedList historyList;
 
     public InMemoryHistoryManager() {
-        this.historyList = new MyLinkedList(); // Создаю список, в кот. будут храниться ссылки на задачи, кот.вызывались
+        // Создаю список, в котором будут храниться ссылки на задачи, которые вызывались
         // т.е.создается мапа с ключом id задачи и значением узлом, и еще поле с последним узлом цепочки
+        this.historyList = new MyLinkedList();
     }
 
     /**
@@ -20,7 +21,11 @@ public class InMemoryHistoryManager implements HistoryManager {
      */
     @Override
     public void addHistory(Task task) {
-        historyList.addTaskAndCreateNode(task);
+        if (task != null) {
+            historyList.addTaskAndCreateNode(task);
+        } else {
+            System.out.println("Ошибка при добавлении задачи в историю просмотров. Пришла задача без аргументов.");
+        }
     }
 
     /**
@@ -36,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     /**
      * Метод возвращает список задач из истории просмотров в списке
      *
-     * @return ArrayList<>()
+     * @return List<>()
      **/
     @Override
     public List<Task> getHistory() {
