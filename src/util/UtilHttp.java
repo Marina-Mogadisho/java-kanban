@@ -6,8 +6,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class UtilHttp {
-    public static ResponseClient send(String type, String UrlRequest, Integer id, String suffix, String body) {
-        return send(type, UrlRequest + id + suffix, body);
+    public static ResponseClient send(String type, String url, Integer id, String suffix, String body) {
+        return send(type, url + id + suffix, body);
     }
 
     public static ResponseClient send(String type, String UrlRequest, Integer id, String body) {
