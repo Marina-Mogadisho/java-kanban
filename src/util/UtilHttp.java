@@ -49,7 +49,7 @@ public class UtilHttp {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return new ResponseClient(response.statusCode(), response.body());
         } catch (Exception e) {
-            return new ResponseClient(500, "Error open URL:" + UrlRequest);
+            return new ResponseClient(500, "Error open URL:" + urlRequest);
         }
     }
 }
