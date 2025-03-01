@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
-    TaskManager manager;
+    protected TaskManager manager;
 
     @BeforeEach
     public abstract void init() throws IOException;
@@ -441,7 +441,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
             manager.addSubtask(subtask1Epic1);
 
             Task task2 = new Task("Task 2", "Description task 1", Status.NEW,
-                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 14.02.2025"));
+                    UtilTime.stringOfDuration("3"), UtilTime.stringOfLocalTime("10:55 15.02.2025"));
 
             task2.setId(task1.getId());
             manager.updateTask(task2);

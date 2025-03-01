@@ -2,7 +2,6 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Subtask extends Task {
 
@@ -36,8 +35,11 @@ public class Subtask extends Task {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!super.equals(object)) return false;
-        if (!Objects.equals(this, object)) return false;
-        return hashCode() == object.hashCode();
+        if (object instanceof Subtask) {
+            Subtask t = (Subtask) object;
+            return getIdEpic().equals(t.getIdEpic());
+        }
+        return true;
     }
 
     @Override

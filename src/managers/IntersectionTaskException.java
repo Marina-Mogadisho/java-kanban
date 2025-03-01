@@ -1,8 +1,6 @@
 package managers;
 
-
-
-public class IntersectionTaskException extends Exception {
+public class IntersectionTaskException extends RuntimeException {
 
     public IntersectionTaskException(String message) {
         super(message);

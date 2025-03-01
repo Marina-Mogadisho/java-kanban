@@ -48,7 +48,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void setNextId(Integer n) {
-        if (nextId < n) nextId = n;
+        if (nextId < n) nextId = n + 1;
     }
 
     /**
@@ -152,6 +152,8 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean intersectionTask(Task newTask) throws IntersectionTaskException {
         if (newTask.getStartTime() == null || newTask.getEndTime() == null) return false;
         for (Task task : tasksTreeSet) {
+            if (task.getId().equals(newTask.getId())) continue;
+
             if (task.getEndTime() == null || task.getStartTime() == null) return false;
             LocalDateTime endTimeTask2 = task.getEndTime();
             LocalDateTime startTimeNewTask = newTask.getStartTime();

@@ -28,7 +28,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
 
     @Test
-    void testSave() throws IOException,IntersectionTaskException {
+    void testSave() throws IOException, IntersectionTaskException {
         HistoryManager historyManager = manager.getHistoryManager();
 
         // Создает пустой файл в каталоге временных файлов по умолчанию
@@ -73,19 +73,4 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             throw new ManagerSaveException("Ошибка теста ==> testException");
         }, "Тест-ошибка. Исключения не произошло");
     }
-
-/*
-        assertThrows(ManagerSaveException.class, () -> {
-            try {
-                HistoryManager historyManager = manager.getHistoryManager();
-                FileBackedTaskManager fileTaskManager = new FileBackedTaskManager(historyManager, "z:\\tetetet.txt");
-                fileTaskManager.save();  // возникнет пустой файл
-                throw new ManagerSaveException("Ошибка теста ==> testException");
-            } catch (ManagerSaveException e) {
-                System.out.println("Тест-ошибка. Исключения не произошло.  " + e.getMessage());
-            }
-        });
-    }
-
- */
 }

@@ -16,7 +16,7 @@ public class Task {
     private LocalDateTime startTime; // дата и время, когда предполагается приступить к выполнению задачи.
     private Type type;
     private boolean lock;
-    private static String format = UtilTime.format;
+    private static final String format = UtilTime.format;
 
     protected Task(String title, String description, Status status) {
         this.title = title;
@@ -124,12 +124,16 @@ public class Task {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Task task = (Task) object;
-        return Objects.equals(title, task.title)
-                && Objects.equals(description, task.description)
-                && Objects.equals(id, task.id)
-                && status == task.status;
+        if (object == null) return false;
+        //if (getClass() != object.getClass()) return false;
+        if (object instanceof Task) {
+            Task task = (Task) object;
+            return Objects.equals(title, task.title)
+                    && Objects.equals(description, task.description)
+                    && Objects.equals(id, task.id)
+                    && status == task.status;
+        }
+        return false;
     }
 
     @Override

@@ -9,7 +9,7 @@ public class UtilTime {
 
     public static LocalDateTime stringOfLocalTime(String time) {
 
-        if (time == null || time.length() == 0) return null;
+        if (time == null || time.isEmpty()) return null;
         else if (time.equals("0")) return null;
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
@@ -21,7 +21,7 @@ public class UtilTime {
     }
 
     public static Duration stringOfDuration(String duration) {
-        if (duration == null || duration.length() == 0) return null;
+        if (duration == null || duration.isEmpty()) return null;
         else if (duration.equals("0")) return null;
         else {
             try {

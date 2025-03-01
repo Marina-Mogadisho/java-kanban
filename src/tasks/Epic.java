@@ -2,7 +2,6 @@ package tasks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
 
@@ -12,7 +11,7 @@ public class Epic extends Task {
     //private Duration duration;
 
     public Epic(String title, String description) {
-        // конструктор родителя tasks.Task, который устанавливает параметры и статус
+        // конструктор родителя Task, который устанавливает параметры и статус
         super(title, description, Status.NEW);
         this.idSubtask = new ArrayList<>();
         this.setType(Type.EPIC);
@@ -42,10 +41,8 @@ public class Epic extends Task {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!super.equals(object)) return false;
-        if (!Objects.equals(this, object)) return false;
-        int h1 = hashCode();
-        int h2 = object.hashCode();
-        return h1 == h2;
+        Epic newepic = (Epic) object;
+        return idSubtask.equals(newepic.idSubtask);
     }
 
 

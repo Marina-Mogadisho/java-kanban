@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws ManagerSaveException, IntersectionTaskException {
-
+/*
         System.out.println();
         System.out.println(" ***  Тестирование программы  ***");
         System.out.println();
@@ -72,6 +72,7 @@ public class Main {
         manager.removeByIdEpic(epic1.getId());
         System.out.println(manager.getHistory());
         */
+        /*
         System.out.println();
         System.out.println("История просмотров после удаления всех подзадач:");
         manager.removeAllSubtasks();
@@ -82,7 +83,7 @@ public class Main {
         System.out.println("История просмотров после удаления задачи: " + task2.getTitle());
         manager.removeByIdTask(task2.getId());
         System.out.println(manager.getHistory());
-
+/*
         manager.removeAllEpics();
         manager.removeAllTasks();
         manager.removeAllSubtasks();
