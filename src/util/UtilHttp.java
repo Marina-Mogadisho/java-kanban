@@ -10,12 +10,12 @@ public class UtilHttp {
         return send(type, url + id + suffix, body);
     }
 
-    public static ResponseClient send(String type, String UrlRequest, Integer id, String body) {
-        return send(type, UrlRequest + id, body);
+    public static ResponseClient send(String type, String urlRequest, Integer id, String body) {
+        return send(type, urlRequest + id, body);
     }
 
-    public static ResponseClient send(String type, String UrlRequest, String body) {
-        URI url = URI.create(UrlRequest);
+    public static ResponseClient send(String type, String urlRequest, String body) {
+        URI url = URI.create(urlRequest);
         HttpRequest request = null;
         switch (type) {
             case "POST":
