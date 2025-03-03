@@ -1,11 +1,5 @@
 package http.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
 public class Endpoint {
     private final EndpointType type;
     private Integer id;
