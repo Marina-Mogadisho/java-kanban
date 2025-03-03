@@ -18,8 +18,8 @@ public class TasksHandler extends BaseHttpHandler {
         //Endpoint endpoint = new Endpoint("tasks", httpExchange);
         //String bodyText=endpoint.getBodyText();
         Endpoint endpoint = new Endpoint("tasks",
-                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
-        String bodyText=getBodyRequest(httpExchange);
+                httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
+        String bodyText = getBodyRequest(httpExchange);
         String responseTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {

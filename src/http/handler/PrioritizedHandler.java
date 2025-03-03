@@ -18,7 +18,7 @@ public class PrioritizedHandler extends BaseHttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Endpoint endpoint = new Endpoint("prioritized",
-                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
+                httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
         String responseTask = "";
         int cod; // код ошибки или успеха
         if (Objects.requireNonNull(endpoint.getType()) == EndpointType.GET) {   // вывести список задач

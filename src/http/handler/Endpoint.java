@@ -14,7 +14,8 @@ public class Endpoint {
     public enum EndpointType {
         GET, GET_ID, POST_CREATE, POST_UPDATE, DELETE_ID, GET_SUB_ID, UNKNOWN
     }
-    public Endpoint(String handler, String requestPath,String requestMethod) {
+
+    public Endpoint(String handler, String requestPath, String requestMethod) {
         id = null;
 
         String[] pathParts = requestPath.split("/");
@@ -66,19 +67,20 @@ public class Endpoint {
         }
         type = EndpointType.UNKNOWN;
     }
-/*
-    public Endpoint(String handler, HttpExchange httpExchange) {
-        String requestPath = httpExchange.getRequestURI().getPath();
-        String requestMethod = httpExchange.getRequestMethod();
-        this(handler,requestPath,requestMethod);
 
-        try (InputStream is = httpExchange.getRequestBody()) {
-            this.bodyText = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            this.bodyText = null;
+    /*
+        public Endpoint(String handler, HttpExchange httpExchange) {
+            String requestPath = httpExchange.getRequestURI().getPath();
+            String requestMethod = httpExchange.getRequestMethod();
+            this(handler,requestPath,requestMethod);
+
+            try (InputStream is = httpExchange.getRequestBody()) {
+                this.bodyText = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                this.bodyText = null;
+            }
         }
-    }
-*/
+    */
     public EndpointType getType() {
         return type;
     }

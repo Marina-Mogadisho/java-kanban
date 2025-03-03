@@ -18,8 +18,8 @@ public class EpicsHandler extends BaseHttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         //Endpoint endpoint = new Endpoint("epics", httpExchange);
         Endpoint endpoint = new Endpoint("epics",
-                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
-        String bodyText=getBodyRequest(httpExchange);
+                httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
+        String bodyText = getBodyRequest(httpExchange);
         String responseTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {

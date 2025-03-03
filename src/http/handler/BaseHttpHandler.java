@@ -30,6 +30,7 @@ public class BaseHttpHandler implements HttpHandler {
     protected TaskManager getManager() {
         return manager;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         sendNotFound(exchange);

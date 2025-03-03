@@ -16,8 +16,8 @@ public class SubtasksHandler extends BaseHttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Endpoint endpoint = new Endpoint("subtasks",
-                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
-        String bodyText=getBodyRequest(httpExchange);
+                httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
+        String bodyText = getBodyRequest(httpExchange);
         String responseSubTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {
