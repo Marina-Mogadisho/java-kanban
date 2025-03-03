@@ -86,9 +86,6 @@ public class Task {
     public void setEndTime(LocalDateTime time) {
     }
 
-    public void setLock(boolean lock) {
-        this.lock = lock;
-    }
 
     public void setStatus(Status status) {
         this.status = status;
@@ -104,10 +101,6 @@ public class Task {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     /**

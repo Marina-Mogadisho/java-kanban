@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class JsonTest {
+
     @Test
     void testJson2ListTask1() throws IntersectionTaskException {
         String jsonTask = "[{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\",\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}]";
@@ -28,10 +29,10 @@ public class JsonTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
 
-        String jsonTaskById = BaseHttpHandler.taskToJson(task1);
+        String jsonTaskById = BaseHttpHandler.taskToJson(task1, Task.class);
         System.out.println(jsonTaskById);
 //----------------------------------------------------------------------------------------------------------
-        Task task2 = BaseHttpHandler.jsonToTask(jsonTaskById);
+        Task task2 = BaseHttpHandler.jsonToTask(jsonTaskById, Task.class);
         System.out.println(task2.toString());
 //----------------------------------------------------------------------------------------------------------
         String jsonTaskById2 = "{\n" +
@@ -45,7 +46,7 @@ public class JsonTest {
                 "\t\t\"lock\": true\n" +
                 "\t}";
         //String jsonTaskById2="{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\",\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}";
-        Task task3 = BaseHttpHandler.jsonToTask(jsonTaskById2);
+        Task task3 = BaseHttpHandler.jsonToTask(jsonTaskById2, Task.class);
         System.out.println(task3.toString());
 
     }
@@ -55,13 +56,13 @@ public class JsonTest {
         Subtask subtask1 = new Subtask(1, "Subtask 1", "Description subtask 1",
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 14.02.2025"));
 
-        String jsonSubTask = BaseHttpHandler.subtaskToJson(subtask1);
+        String jsonSubTask = BaseHttpHandler.taskToJson(subtask1, Subtask.class);
         System.out.println(jsonSubTask);
-        Subtask subtask2 = BaseHttpHandler.jsonToSubtask(jsonSubTask);
+        Subtask subtask2 = BaseHttpHandler.jsonToTask(jsonSubTask, Subtask.class);
         System.out.println(subtask2.toString());
 
         String jsonTaskById2 = "{\"idEpic\":1,\"lockEpic\":true,\"title\":\"Subtask 1\",\"description\":\"Description subtask 1\",\"status\":\"NEW\",\"duration\":1,\"startTime\":\"09:50 14.02.2025\",\"type\":\"SUBTASK\",\"lock\":false}";
-        Subtask subtask3 = BaseHttpHandler.jsonToSubtask(jsonTaskById2);
+        Subtask subtask3 = BaseHttpHandler.jsonToTask(jsonTaskById2, Subtask.class);
         System.out.println(subtask3.toString());
 
     }
@@ -76,14 +77,14 @@ public class JsonTest {
         gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
 
         //Gson gson = gsonBuilder.create();
-        String jsonEpic = BaseHttpHandler.epicToJson(epic1);
+        String jsonEpic = BaseHttpHandler.taskToJson(epic1, Epic.class);
         System.out.println(jsonEpic);
 
-        Epic epic2 = BaseHttpHandler.jsonToEpic(jsonEpic);
+        Epic epic2 = BaseHttpHandler.jsonToTask(jsonEpic, Epic.class);
         System.out.println(epic2.toString());
 
         String jsonEpic2 = "{\"idSubtask\":[],\"endTime\":\"\",\"title\":\"tasks.Epic 1\",\"description\":\"Description epic 1\",\"status\":\"NEW\",\"duration\":\"\",\"startTime\":\"\",\"type\":\"EPIC\",\"lock\":false}\n";
-        Epic epic3 = BaseHttpHandler.jsonToEpic(jsonEpic2);
+        Epic epic3 = BaseHttpHandler.jsonToTask(jsonEpic2, Epic.class);
         System.out.println(epic3.toString());
     }
 }

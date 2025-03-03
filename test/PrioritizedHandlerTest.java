@@ -52,7 +52,7 @@ public class PrioritizedHandlerTest {
         int cod2 = ret2.getCod();
 
         List<Task> hh = manager.getPrioritizedTasks();
-        List<Task> responsList = BaseHttpHandler.jsonTopPioritized(responseBody);/**/
+        List<Task> responsList = BaseHttpHandler.jsonToListTasks(responseBody);/**/
         assertEquals(hh, responsList, "История просмотров не совпадает.");
 
         // проверяем код ответа

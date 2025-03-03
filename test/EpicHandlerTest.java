@@ -42,7 +42,7 @@ public class EpicHandlerTest {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(epic1, Epic.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/epics", taskJson);
@@ -64,12 +64,10 @@ public class EpicHandlerTest {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(epic1, Epic.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
-        //ResponseClient ret2 =
         UtilHttp.send("POST", "http://localhost:8080/epics", taskJson);
-        //int cod = ret2.getCod();
 
         //----------------Получаем задачу-----------------------------------
         ResponseClient ret3 = UtilHttp.send("GET", "http://localhost:8080/epics", null);
@@ -86,7 +84,6 @@ public class EpicHandlerTest {
         Epic t1 = tasksList.getFirst();  // первая задача из коллекции тасок из файла
         Epic t2 = responsList.getFirst();  // первая задача из ответа
         assertEquals(t1, t2);
-        //int id=t2.getId();
 
         assertEquals(tasksList, responsList, "Списки задач из ответа сервера и менеджера  не совпадают");
         assertEquals(t1, t2, "Первые задачи коллекций из ответа сервера и менеджера  не совпадают");
@@ -98,12 +95,10 @@ public class EpicHandlerTest {
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(epic1, Epic.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
-        //ResponseClient ret2 =
         UtilHttp.send("POST", "http://localhost:8080/epics", taskJson);
-        //int cod = ret2.getCod();
         List<Epic> tasksFromManager = manager.getListAllEpic();
         Epic responseTask = tasksFromManager.getFirst();
         int id1 = responseTask.getId();
@@ -116,7 +111,7 @@ public class EpicHandlerTest {
         // проверяем код ответа
         assertEquals(200, cod2, "Сервер не отправил нужную задачу по ее id");
 
-        Epic responseTask2 = BaseHttpHandler.jsonToEpic(responseBody);
+        Epic responseTask2 = BaseHttpHandler.jsonToTask(responseBody, Epic.class);
         int id = responseTask2.getId();
         Epic task = manager.getEpicById(id);
         List<Integer> ss = task.getAllSubtask();
@@ -136,7 +131,6 @@ public class EpicHandlerTest {
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
         manager.addSubtask(subtask1Epic1);
         // конвертируем задачу в JSON
-        //String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
 
         //----------------Получаем подзадачи Эпика по его id -----------------------------------
 
@@ -162,19 +156,18 @@ public class EpicHandlerTest {
         // создаём эпик
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(epic1, Epic.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         //ResponseClient ret2 =
         UtilHttp.send("POST", "http://localhost:8080/epics", taskJson);
-        //int cod = ret2.getCod();
         List<Epic> tasksFromManager = manager.getListAllEpic();
         Epic responseTask = tasksFromManager.getFirst();
         int id1 = responseTask.getId();
         //----------------Получаем задачу-----------------------------------
         ResponseClient ret3 = UtilHttp.send("GET", "http://localhost:8080/epics/", id1, null);
         String responseBody = ret3.getBody();
-        Epic responseTask2 = BaseHttpHandler.jsonToEpic(responseBody);
+        Epic responseTask2 = BaseHttpHandler.jsonToTask(responseBody, Epic.class);
         int id = responseTask2.getId();
         //Epic task =
         manager.getEpicById(id);
@@ -183,7 +176,7 @@ public class EpicHandlerTest {
 
         Epic epicNew = new Epic("Epic 1", "Description epic 1");
         epicNew.setId(id1);
-        String taskJsonNew = BaseHttpHandler.epicToJson(epicNew);  // сериализовали в Json
+        String taskJsonNew = BaseHttpHandler.taskToJson(epicNew, Epic.class);  // сериализовали в Json
 
         ResponseClient ret4 = UtilHttp.send("POST", "http://localhost:8080/epics/", id1, taskJsonNew);
         int cod3 = ret4.getCod();
@@ -199,21 +192,18 @@ public class EpicHandlerTest {
         // создаём эпик
         Epic epic1 = new Epic("Epic 1", "Description epic 1");
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.epicToJson(epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(epic1, Epic.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
-        //ResponseClient ret2 =
         UtilHttp.send("POST", "http://localhost:8080/epics", taskJson);
-        //int cod = ret2.getCod();
         List<Epic> tasksFromManager = manager.getListAllEpic();
         Epic responseTask = tasksFromManager.getFirst();
         int id1 = responseTask.getId();
         //----------------Получаем задачу-----------------------------------
         ResponseClient ret3 = UtilHttp.send("GET", "http://localhost:8080/epics/", id1, null);
         String responseBody = ret3.getBody();
-        Epic responseTask2 = BaseHttpHandler.jsonToEpic(responseBody);
+        Epic responseTask2 = BaseHttpHandler.jsonToTask(responseBody, Epic.class);
         int id = responseTask2.getId();
-        //Epic task =
         manager.getEpicById(id);
 
         //--------------Удаляем подзадачу ------------------------------------------

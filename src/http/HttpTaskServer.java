@@ -1,13 +1,5 @@
 package http;
 
-/*
-Он будет слушать порт $8080$ и принимать запросы.
-Это будет основной класс вашего приложения.
- В нём должен находиться метод main, который будет
-  запускаться для начала работы с программой.
-
- */
-
 import com.sun.net.httpserver.HttpServer;
 
 import java.net.InetSocketAddress;
@@ -46,7 +38,6 @@ public class HttpTaskServer {
         httpServer.createContext("/epics", new EpicsHandler(manager));
         httpServer.createContext("/history", new HistoryHandler(manager));
         httpServer.createContext("/prioritized", new PrioritizedHandler(manager));
-        httpServer.createContext("/", new BaseHttpHandler());
         httpServer.start();
 
         return true;

@@ -23,7 +23,6 @@ public class MyLinkedList {
     public Task getMapNode(Integer id) {  // метод возвращает задачу из узла по ее id, у узла тот же id этой задачи
         Node node = mapNode.get(id);
         if (node == null) {
-            //System.out.println("Узел пуст. НЕ могу вывести задачу c id= " + id);
             return null;
         } else {
             return node.task;

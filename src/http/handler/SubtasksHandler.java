@@ -15,14 +15,16 @@ public class SubtasksHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Endpoint endpoint = new Endpoint("subtasks", httpExchange);
+        Endpoint endpoint = new Endpoint("subtasks",
+                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
+        String bodyText=getBodyRequest(httpExchange);
         String responseSubTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {
             case GET_ID:    // вывести задачу по ID
                 try {
                     Subtask subtaskById = getManager().getSubtaskById(endpoint.getId()); // получили задачу по ID из запроса
-                    responseSubTask = subtaskToJson(subtaskById); // сериализовали TASK в Gson для передачи ответа
+                    responseSubTask = taskToJson(subtaskById, Subtask.class); // сериализовали TASK в Gson для передачи ответа
                     cod = 200;
                 } catch (Exception e) {
                     cod = 404;
@@ -30,12 +32,12 @@ public class SubtasksHandler extends BaseHttpHandler {
                 break;
             case GET:   // вывести список задач
                 List<Subtask> subtasks = getManager().getListAllSubtask(); // получили список задач
-                responseSubTask = listSubtasksToJson(subtasks);
+                responseSubTask = listToJson(subtasks);
                 cod = 200;
                 break;
             case POST_CREATE:    // создать задачу
                 try {
-                    Subtask subtaskCreate = jsonToSubtask(endpoint.getBodyText());
+                    Subtask subtaskCreate = jsonToTask(bodyText, Subtask.class);
                     getManager().addSubtask(subtaskCreate);
                     cod = 201;
                 } catch (Exception e) {
@@ -44,7 +46,7 @@ public class SubtasksHandler extends BaseHttpHandler {
                 break;
             case POST_UPDATE:
                 try {
-                    Subtask subtaskUpdate = jsonToSubtask(endpoint.getBodyText());
+                    Subtask subtaskUpdate = jsonToTask(bodyText, Subtask.class);
                     getManager().updateSubtaskAndEpic(subtaskUpdate); // обновили задачу
                     cod = 201;
                 } catch (Exception e) {

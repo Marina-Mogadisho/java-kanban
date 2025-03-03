@@ -11,7 +11,6 @@ import static util.UtilTime.*;
 //Конвертер. Задаем свои правила конвертации объекта
 
 public class DurationAdapter extends TypeAdapter<Duration> {
-    //private static final DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern(format);
 
     @Override
     public void write(JsonWriter jsonWriter, Duration duration) throws IOException {

@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskHandlerTest {
     TaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
-    //TaskManager manager = new FileBackedTaskManager(new InMemoryHistoryManager(),"file4data.txt");
     HttpTaskServer server = new HttpTaskServer(manager);
 
 
@@ -42,8 +41,7 @@ public class TaskHandlerTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         // конвертируем её в JSON
-        //String taskJson = gson.toJson(task1);
-        String taskJson = BaseHttpHandler.taskToJson(task1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(task1, Task.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/tasks", taskJson);
@@ -65,7 +63,7 @@ public class TaskHandlerTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         // конвертируем её в JSON
-        String taskJson = BaseHttpHandler.taskToJson(task1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(task1, Task.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret1 = UtilHttp.send("POST", "http://localhost:8080/tasks", taskJson);
@@ -88,7 +86,6 @@ public class TaskHandlerTest {
         Task t1 = tasksList.getFirst();  // первая задача из коллекции тасок из файла
         Task t2 = responsList.getFirst();  // первая задача из ответа
         assertEquals(t1, t2);
-        //int id=t2.getId();
 
         assertEquals(tasksList, responsList, "Списки задач из ответа сервера и менеджера  не совпадают");
         assertEquals(t1, t2, "Первые задачи коллекций из ответа сервера и менеджера  не совпадают");
@@ -100,7 +97,7 @@ public class TaskHandlerTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         // конвертируем её в JSON
-        String taskJson = BaseHttpHandler.taskToJson(task1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(task1, Task.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret1 = UtilHttp.send("POST", "http://localhost:8080/tasks", taskJson);
@@ -117,7 +114,7 @@ public class TaskHandlerTest {
         // проверяем код ответа
         assertEquals(200, cod2, "Сервер не отправил нужную задачу по ее id");
 
-        Task responsTask = BaseHttpHandler.jsonToTask(responseBody);
+        Task responsTask = BaseHttpHandler.jsonToTask(responseBody, Task.class);
         int id = responsTask.getId();
         Task task = manager.getTaskById(id);
 
@@ -131,8 +128,7 @@ public class TaskHandlerTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         // конвертируем её в JSON
-        //String taskJson = gson.toJson(task1);
-        String taskJson = BaseHttpHandler.taskToJson(task1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(task1, Task.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret1 = UtilHttp.send("POST", "http://localhost:8080/tasks", taskJson);
@@ -159,7 +155,7 @@ public class TaskHandlerTest {
         Task newTask = new Task("TaskUpdate", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 01.04.2025"));
         newTask.setId(id1);
-        String taskJsonNew = BaseHttpHandler.taskToJson(newTask);  // сериализовали в Json
+        String taskJsonNew = BaseHttpHandler.taskToJson(newTask, Task.class);  // сериализовали в Json
 
         ResponseClient ret3 = UtilHttp.send("POST", "http://localhost:8080/tasks/", id1, taskJsonNew);
         int cod3 = ret3.getCod();
@@ -176,8 +172,7 @@ public class TaskHandlerTest {
         Task task1 = new Task("Task 1", "Description task 1", Status.NEW,
                 UtilTime.stringOfDuration("10"), UtilTime.stringOfLocalTime("10:50 14.02.2025"));
         // конвертируем её в JSON
-        //String taskJson = gson.toJson(task1);
-        String taskJson = BaseHttpHandler.taskToJson(task1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(task1, Task.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret1 = UtilHttp.send("POST", "http://localhost:8080/tasks", taskJson);
@@ -202,9 +197,7 @@ public class TaskHandlerTest {
         //--------------Удаляем задачу ------------------------------------------
         // создаём HTTP-клиент и запрос
         ResponseClient ret3 = UtilHttp.send("DELETE", "http://localhost:8080/tasks/", id1, null);
-        //String responseBodyDelete = ret3.getBody();
         int cod3 = ret3.getCod();
-        //Task task2 = manager.getTaskById(id1);
 
         // проверяем код ответа
         assertEquals(200, cod3, "Код успеха неверный, задача не удалилась.");

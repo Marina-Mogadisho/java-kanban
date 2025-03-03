@@ -45,7 +45,7 @@ public class SubtaskHandlerTest {
         // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.subtaskToJson(subtask1Epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/subtasks", taskJson);
@@ -71,7 +71,7 @@ public class SubtaskHandlerTest {
         // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.subtaskToJson(subtask1Epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/subtasks", taskJson);
@@ -114,10 +114,9 @@ public class SubtaskHandlerTest {
         manager.addEpic(epic1);
         Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
-        // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.subtaskToJson(subtask1Epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/subtasks", taskJson);
@@ -144,7 +143,7 @@ public class SubtaskHandlerTest {
         // проверяем код ответа
         assertEquals(200, cod2, "Сервер не отправил нужную задачу по ее id");
 
-        Subtask responsSubtask = BaseHttpHandler.jsonToSubtask(responseBody);
+        Subtask responsSubtask = BaseHttpHandler.jsonToTask(responseBody, Subtask.class);
         int id = responsSubtask.getId();
         Subtask task = manager.getSubtaskById(id);
 
@@ -159,10 +158,9 @@ public class SubtaskHandlerTest {
         manager.addEpic(epic1);
         Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
-        // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.subtaskToJson(subtask1Epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/subtasks", taskJson);
@@ -203,7 +201,7 @@ public class SubtaskHandlerTest {
         Subtask subtask1Epic1New = new Subtask(epic1.getId(), "SubtaskNEW", "Description subtask 1",
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
         subtask1Epic1New.setId(id1);
-        String taskJsonNew = BaseHttpHandler.subtaskToJson(subtask1Epic1New);  // сериализовали в Json
+        String taskJsonNew = BaseHttpHandler.taskToJson(subtask1Epic1New, Subtask.class);  // сериализовали в Json
 
         ResponseClient ret4 = UtilHttp.send("POST", "http://localhost:8080/subtasks/", id1, taskJsonNew);
         int cod3 = ret4.getCod();
@@ -224,7 +222,7 @@ public class SubtaskHandlerTest {
         // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
-        String taskJson = BaseHttpHandler.subtaskToJson(subtask1Epic1);  // сериализовали в Json
+        String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
 
         // создаём HTTP-клиент и запрос
         ResponseClient ret2 = UtilHttp.send("POST", "http://localhost:8080/subtasks", taskJson);
@@ -265,7 +263,6 @@ public class SubtaskHandlerTest {
         // создаём HTTP-клиент и запрос
         ResponseClient ret4 = UtilHttp.send("DELETE", "http://localhost:8080/subtasks/", id1,
                 null);
-        //String responseBodyDelete = ret4.getBody();
         int cod3 = ret4.getCod();
         // проверяем код ответа
         assertEquals(200, cod3, "Задача не удалилась.");

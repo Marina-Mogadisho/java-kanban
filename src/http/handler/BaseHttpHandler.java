@@ -13,6 +13,7 @@ import util.DurationAdapter;
 import util.LocalDateTimeAdapter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -22,16 +23,24 @@ import java.util.List;
 public class BaseHttpHandler implements HttpHandler {
     private final TaskManager manager;
 
-    public BaseHttpHandler() {
-        manager = null;
-    }
-
     public BaseHttpHandler(TaskManager manager) {
         this.manager = manager;
     }
 
     protected TaskManager getManager() {
         return manager;
+    }
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        sendNotFound(exchange);
+    }
+
+    public String getBodyRequest(HttpExchange exchange) throws IOException {
+        try (InputStream is = exchange.getRequestBody()) {
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     protected void sendResponseCode(int cod, HttpExchange httpExchange, String responseTask) throws IOException {
@@ -106,175 +115,71 @@ public class BaseHttpHandler implements HttpHandler {
         h.close();
     }
 
-
     /**
      * КОД ОШИБКИ 500
      * Метод для отправки ответа,
      * если при обработке запроса возникла ошибка, например при сохранении данных менеджера в файл.
      */
     protected void sendInternalServerError(HttpExchange h) throws IOException {
-        //byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(500, 0);
         h.getResponseBody().write("".getBytes());
         h.close();
     }
 
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        sendNotFound(exchange);
-    }
 
     /**
-     * Методы преобразования строки Json в задачи их родных типов (Task, SubTask и Эпик)
+     * Метод преобразования строки Json в задачи их родных типов (Task, SubTask и Эпик)
      * с учетом установленного формата через адаптер
      */
-
-    public static Task jsonToTask(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-
-        Gson gson = gsonBuilder.create();
-        return gson.fromJson(jsonTask, Task.class);
+    public static <T extends Task> T jsonToTask(String jsonTask, Class<T> clazz) {
+        Gson gson = createJson();
+        return gson.fromJson(jsonTask, clazz);
     }
 
 
     public static List<Task> jsonToListTasks(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        Gson gson = gsonBuilder.create();
+        Gson gson = createJson();
         Type listType = new TypeToken<List<Task>>() {
         }.getType();
         return gson.fromJson(jsonTask, listType);
-
-    }
-
-    public static List<Task> jsonTopPioritized(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        Gson gson = gsonBuilder.create();
-        Type listType = new TypeToken<List<Task>>() {
-        }.getType();
-        return gson.fromJson(jsonTask, listType);
-
     }
 
     public static List<Subtask> jsonToListSubtasks(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        Gson gson = gsonBuilder.create();
+        Gson gson = createJson();
         Type listType = new TypeToken<List<Subtask>>() {
         }.getType();
         return gson.fromJson(jsonTask, listType);
-
     }
 
     public static List<Epic> jsonToListEpics(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        Gson gson = gsonBuilder.create();
+        Gson gson = createJson();
         Type listType = new TypeToken<List<Epic>>() {
         }.getType();
         return gson.fromJson(jsonTask, listType);
     }
 
-    public static List<Integer> jsonToListSubtaskForEpics(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        Gson gson = gsonBuilder.create();
-        Type listType = new TypeToken<List<Integer>>() {
+    public static <T> String listToJson(List<T> tasks) {
+        Gson gson = createJson();
+        Type listType = new TypeToken<List<T>>() {
         }.getType();
-        return gson.fromJson(jsonTask, listType);
-
+        return gson.toJson(tasks, listType);
     }
-
-
-    public static Subtask jsonToSubtask(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-
-        Gson gson = gsonBuilder.create();
-        return gson.fromJson(jsonTask, Subtask.class);
-    }
-
-    public static Epic jsonToEpic(String jsonTask) {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-
-        Gson gson = gsonBuilder.create();
-        return gson.fromJson(jsonTask, Epic.class);
-    }
-
 
     /**
-     * Методы преобразования всех типов задач и их списков в тип Json
+     * Метод преобразования всех типов задач в строку Json
      * с учетом установленного формата через адаптер
      */
+    public static <T> String taskToJson(T task, Class<T> clazz) {
+        Gson gson = createJson();
+        return gson.toJson(task, clazz);
+    }
+
     private static Gson createJson() {
         GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
         return gsonBuilder.create();
-    }
-
-    public static String listTasksToJson(List<Task> tasks) {
-        Gson gson = createJson();
-        Type listType = new TypeToken<List<Task>>() {
-        }.getType();
-        return gson.toJson(tasks, listType);
-    }
-
-    public static String listSubtasksToJson(List<Subtask> subtasks) {
-        Gson gson = createJson();
-        Type listType = new TypeToken<List<Subtask>>() {
-        }.getType();
-        return gson.toJson(subtasks, listType);
-    }
-
-
-    public static String listEpicToJson(List<Epic> subtasks) {
-        Gson gson = createJson();
-        Type listType = new TypeToken<List<Epic>>() {
-        }.getType();
-        return gson.toJson(subtasks, listType);
-    }
-
-    public static String arrayTasksToJson(Task[] task) {
-        Gson gson = createJson();
-        return gson.toJson(task);
-    }
-
-    public static String arraySubtasksToJson(Subtask[] subtask) {
-        Gson gson = createJson();
-        return gson.toJson(subtask);
-    }
-
-    public static String arrayEpicsToJson(Epic[] epic) {
-        Gson gson = createJson();
-        return gson.toJson(epic);
-    }
-
-    public static String subtaskToJson(Subtask subtask) {
-        Gson gson = createJson();
-        return gson.toJson(subtask);
-    }
-
-    public static String taskToJson(Task task) {
-        Gson gson = createJson();
-        return gson.toJson(task);
-    }
-
-    public static String epicToJson(Epic epic) {
-        Gson gson = createJson();
-        return gson.toJson(epic);
     }
 }
 

@@ -8,7 +8,6 @@ public class Epic extends Task {
     private final ArrayList<Integer> idSubtask;
     // дата и время, когда предполагается закончить выполнение задачи, по времени последнего Subtask.
     private LocalDateTime endTime;
-    //private Duration duration;
 
     public Epic(String title, String description) {
         // конструктор родителя Task, который устанавливает параметры и статус

@@ -16,12 +16,13 @@ public class HistoryHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Endpoint endpoint = new Endpoint("history", httpExchange);
+        Endpoint endpoint = new Endpoint("history",
+                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
         String responseTask = "";
         int cod; // код ошибки или успеха
         if (Objects.requireNonNull(endpoint.getType()) == EndpointType.GET) {   // вывести список задач
             List<Task> tasks = getManager().getHistory(); // получили список задач
-            responseTask = listTasksToJson(tasks);
+            responseTask = listToJson(tasks);
             cod = 200;
         } else {
             cod = 500;

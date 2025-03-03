@@ -15,15 +15,18 @@ public class TasksHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Endpoint endpoint = new Endpoint("tasks", httpExchange);
-
+        //Endpoint endpoint = new Endpoint("tasks", httpExchange);
+        //String bodyText=endpoint.getBodyText();
+        Endpoint endpoint = new Endpoint("tasks",
+                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
+        String bodyText=getBodyRequest(httpExchange);
         String responseTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {
             case GET_ID:    // вывести задачу по ID
                 try {
                     Task taskById = getManager().getTaskById(endpoint.getId()); // получили задачу по ID из запроса
-                    responseTask = taskToJson(taskById); // сериализовали TASK в Gson для передачи ответа
+                    responseTask = taskToJson(taskById, Task.class); // сериализовали TASK в Gson для передачи ответа
                     cod = 200;
                 } catch (Exception e) {
                     cod = 404;
@@ -31,12 +34,12 @@ public class TasksHandler extends BaseHttpHandler {
                 break;
             case GET:   // вывести список задач
                 List<Task> tasks = getManager().getListAllTasks(); // получили список задач
-                responseTask = listTasksToJson(tasks);
+                responseTask = listToJson(tasks);
                 cod = 200;
                 break;
             case POST_CREATE:    // создать задачу
                 try {
-                    Task taskCreate = jsonToTask(endpoint.getBodyText());
+                    Task taskCreate = jsonToTask(bodyText, Task.class);
                     getManager().addTask(taskCreate);
                     cod = 201;
                 } catch (Exception e) {
@@ -45,7 +48,7 @@ public class TasksHandler extends BaseHttpHandler {
                 break;
             case POST_UPDATE:
                 try {
-                    Task taskUpdate = jsonToTask(endpoint.getBodyText());
+                    Task taskUpdate = jsonToTask(bodyText, Task.class);
                     getManager().updateTask(taskUpdate); // обновили задачу
                     cod = 201;
                 } catch (Exception e) {

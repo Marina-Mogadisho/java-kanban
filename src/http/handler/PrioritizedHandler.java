@@ -17,12 +17,13 @@ public class PrioritizedHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Endpoint endpoint = new Endpoint("prioritized", httpExchange);
+        Endpoint endpoint = new Endpoint("prioritized",
+                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
         String responseTask = "";
         int cod; // код ошибки или успеха
         if (Objects.requireNonNull(endpoint.getType()) == EndpointType.GET) {   // вывести список задач
             List<Task> tasks = getManager().getPrioritizedTasks(); // получили список задач
-            responseTask = listTasksToJson(tasks);
+            responseTask = listToJson(tasks);
             cod = 200;
         } else {
 

@@ -16,14 +16,17 @@ public class EpicsHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        Endpoint endpoint = new Endpoint("epics", httpExchange);
+        //Endpoint endpoint = new Endpoint("epics", httpExchange);
+        Endpoint endpoint = new Endpoint("epics",
+                httpExchange.getRequestURI().getPath(),httpExchange.getRequestMethod());
+        String bodyText=getBodyRequest(httpExchange);
         String responseTask = "";
         int cod; // код ошибки или успеха
         switch (endpoint.getType()) {
             case GET_ID:    // вывести задачу по ID
                 try {
                     Epic epicsById = getManager().getEpicById(endpoint.getId()); // получили задачу по ID из запроса
-                    responseTask = epicToJson(epicsById); // сериализовали TASK в Gson для передачи ответа
+                    responseTask = taskToJson(epicsById, Epic.class); // сериализовали TASK в Gson для передачи ответа
                     cod = 200;
                 } catch (Exception e) {
                     cod = 404;
@@ -32,7 +35,7 @@ public class EpicsHandler extends BaseHttpHandler {
             case GET_SUB_ID: //вывести список подзадач по id Epic
                 try {
                     List<Subtask> ss = getManager().getListAllSubtaskForEpicId(endpoint.getId());
-                    responseTask = listSubtasksToJson(ss);
+                    responseTask = listToJson(ss);
                     cod = 200;
                 } catch (Exception e) {
                     cod = 404;
@@ -40,12 +43,12 @@ public class EpicsHandler extends BaseHttpHandler {
                 break;
             case GET:   // вывести список задач
                 List<Epic> epics = getManager().getListAllEpic(); // получили список задач
-                responseTask = listEpicToJson(epics);
+                responseTask = listToJson(epics);
                 cod = 200;
                 break;
             case POST_CREATE:    // создать задачу
                 try {
-                    Epic epicCreate = jsonToEpic(endpoint.getBodyText());
+                    Epic epicCreate = jsonToTask(bodyText, Epic.class);
                     getManager().addEpic(epicCreate);
                     cod = 201;
                 } catch (Exception e) {
@@ -54,7 +57,7 @@ public class EpicsHandler extends BaseHttpHandler {
                 break;
             case POST_UPDATE:
                 try {
-                    Epic epic = jsonToEpic(endpoint.getBodyText());
+                    Epic epic = jsonToTask(bodyText, Epic.class);
                     getManager().updateEpic(epic); // обновили задачу
                     cod = 201;
                 } catch (Exception e) {
@@ -69,7 +72,6 @@ public class EpicsHandler extends BaseHttpHandler {
             default:
                 cod = 500;
         }
-
         sendResponseCode(cod, httpExchange, responseTask); // выводим код ошибки
     }
 }
