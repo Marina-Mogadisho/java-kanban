@@ -3,7 +3,6 @@ package http.handler;
 public class Endpoint {
     private final EndpointType type;
     private Integer id;
-    private String bodyText;
 
     public enum EndpointType {
         GET, GET_ID, POST_CREATE, POST_UPDATE, DELETE_ID, GET_SUB_ID, UNKNOWN
@@ -29,7 +28,6 @@ public class Endpoint {
                 type = EndpointType.POST_CREATE;
                 return;
             }
-
         }
         //--------------------------------------------------------------
         if (pathParts.length == 3) {
@@ -49,7 +47,6 @@ public class Endpoint {
                 setId(pathParts);
                 return;
             }
-
         }
         //--------------------------------------------------------------
         if (pathParts.length == 4) {
@@ -62,29 +59,12 @@ public class Endpoint {
         type = EndpointType.UNKNOWN;
     }
 
-    /*
-        public Endpoint(String handler, HttpExchange httpExchange) {
-            String requestPath = httpExchange.getRequestURI().getPath();
-            String requestMethod = httpExchange.getRequestMethod();
-            this(handler,requestPath,requestMethod);
-
-            try (InputStream is = httpExchange.getRequestBody()) {
-                this.bodyText = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                this.bodyText = null;
-            }
-        }
-    */
     public EndpointType getType() {
         return type;
     }
 
     public Integer getId() {
         return id;
-    }
-
-    public String getBodyText() {
-        return bodyText;
     }
 
     private void setId(String[] pathParts) {

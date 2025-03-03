@@ -16,7 +16,6 @@ public class EpicsHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        //Endpoint endpoint = new Endpoint("epics", httpExchange);
         Endpoint endpoint = new Endpoint("epics",
                 httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
         String bodyText = getBodyRequest(httpExchange);

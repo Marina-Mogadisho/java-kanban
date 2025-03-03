@@ -1,4 +1,5 @@
 
+import com.google.gson.reflect.TypeToken;
 import http.HttpTaskServer;
 import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
@@ -81,7 +82,8 @@ public class TaskHandlerTest {
 
         List<Task> tasksList = manager.getListAllTasks(); // получили список задач из файла через менеджер
         // получили список задач из тела ответа сервера
-        List<Task> responsList = BaseHttpHandler.jsonToListTasks(responseBody);
+        List<Task> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Task>>() {
+        }.getType());
 
         Task t1 = tasksList.getFirst();  // первая задача из коллекции тасок из файла
         Task t2 = responsList.getFirst();  // первая задача из ответа
@@ -143,7 +145,8 @@ public class TaskHandlerTest {
 
         // проверяем код ответа
         assertEquals(200, cod2, "Сервер не отправил нужную задачу по ее id");
-        List<Task> listTask = BaseHttpHandler.jsonToListTasks(responseBody);
+        List<Task> listTask = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Task>>() {
+        }.getType());
         Task responsTask = listTask.getFirst();
         int id1 = responsTask.getId();
         Task task = manager.getTaskById(id1);
@@ -187,7 +190,8 @@ public class TaskHandlerTest {
 
         // проверяем код ответа
         assertEquals(200, cod2, "Сервер не отправил нужную задачу по ее id");
-        List<Task> listTask = BaseHttpHandler.jsonToListTasks(responseBody);
+        List<Task> listTask = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Task>>() {
+        }.getType());
         Task responsTask = listTask.getFirst();
         int id1 = responsTask.getId();
         Task task = manager.getTaskById(id1);

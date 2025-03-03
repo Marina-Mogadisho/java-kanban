@@ -15,8 +15,6 @@ public class TasksHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        //Endpoint endpoint = new Endpoint("tasks", httpExchange);
-        //String bodyText=endpoint.getBodyText();
         Endpoint endpoint = new Endpoint("tasks",
                 httpExchange.getRequestURI().getPath(), httpExchange.getRequestMethod());
         String bodyText = getBodyRequest(httpExchange);

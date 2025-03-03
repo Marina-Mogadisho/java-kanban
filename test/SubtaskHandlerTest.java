@@ -1,3 +1,4 @@
+import com.google.gson.reflect.TypeToken;
 import http.HttpTaskServer;
 import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
@@ -68,7 +69,6 @@ public class SubtaskHandlerTest {
         manager.addEpic(epic1);
         Subtask subtask1Epic1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1",
                 Status.NEW, UtilTime.stringOfDuration("1"), UtilTime.stringOfLocalTime("09:50 15.02.2025"));
-        // manager.addSubtask(subtask1Epic1);
 
         // конвертируем подзадачу в JSON
         String taskJson = BaseHttpHandler.taskToJson(subtask1Epic1, Subtask.class);  // сериализовали в Json
@@ -96,7 +96,8 @@ public class SubtaskHandlerTest {
 
         List<Subtask> tasksList = manager.getListAllSubtask(); // получили список задач из файла через менеджер
         // получили список задач из тела ответа сервера
-        List<Subtask> responsList = BaseHttpHandler.jsonToListSubtasks(responseBody);
+        List<Subtask> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Subtask>>() {
+        }.getType());
 
         Subtask t1 = tasksList.getFirst();  // первая задача из коллекции тасок из файла
         Subtask t2 = responsList.getFirst();  // первая задача из ответа
@@ -185,7 +186,8 @@ public class SubtaskHandlerTest {
 
         List<Subtask> tasksList = manager.getListAllSubtask(); // получили список задач из файла через менеджер
         // получили список задач из тела ответа сервера
-        List<Subtask> responsList = BaseHttpHandler.jsonToListSubtasks(responseBody);
+        List<Subtask> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Subtask>>() {
+        }.getType());
         Subtask responseSubtask = tasksFromManager.getFirst();
         int id1 = responseSubtask.getId();
 
@@ -247,7 +249,8 @@ public class SubtaskHandlerTest {
 
         List<Subtask> tasksList = manager.getListAllSubtask(); // получили список задач из файла через менеджер
         // получили список задач из тела ответа сервера
-        List<Subtask> responsList = BaseHttpHandler.jsonToListSubtasks(responseBody);
+        List<Subtask> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Subtask>>() {
+        }.getType());
         Subtask responseSubtask = tasksFromManager.getFirst();
         int id1 = responseSubtask.getId();
 

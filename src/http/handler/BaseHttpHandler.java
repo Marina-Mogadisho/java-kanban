@@ -6,8 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.TaskManager;
-import tasks.Epic;
-import tasks.Subtask;
 import tasks.Task;
 import util.DurationAdapter;
 import util.LocalDateTimeAdapter;
@@ -128,7 +126,6 @@ public class BaseHttpHandler implements HttpHandler {
         h.close();
     }
 
-
     /**
      * Метод преобразования строки Json в задачи их родных типов (Task, SubTask и Эпик)
      * с учетом установленного формата через адаптер
@@ -138,26 +135,26 @@ public class BaseHttpHandler implements HttpHandler {
         return gson.fromJson(jsonTask, clazz);
     }
 
-
-    public static List<Task> jsonToListTasks(String jsonTask) {
+    public static <T extends Task> List<T> jsonToList(String jsonTask, Type listType) {
         Gson gson = createJson();
-        Type listType = new TypeToken<List<Task>>() {
-        }.getType();
         return gson.fromJson(jsonTask, listType);
     }
 
-    public static List<Subtask> jsonToListSubtasks(String jsonTask) {
-        Gson gson = createJson();
-        Type listType = new TypeToken<List<Subtask>>() {
-        }.getType();
-        return gson.fromJson(jsonTask, listType);
+    /**
+     * Метод преобразования всех типов задач в строку Json
+     * с учетом установленного формата через адаптер
+     */
+
+    private static Gson createJson() {
+        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
+        return gsonBuilder.create();
     }
 
-    public static List<Epic> jsonToListEpics(String jsonTask) {
+    public static <T> String taskToJson(T task, Class<T> clazz) {
         Gson gson = createJson();
-        Type listType = new TypeToken<List<Epic>>() {
-        }.getType();
-        return gson.fromJson(jsonTask, listType);
+        return gson.toJson(task, clazz);
     }
 
     public static <T> String listToJson(List<T> tasks) {
@@ -167,21 +164,6 @@ public class BaseHttpHandler implements HttpHandler {
         return gson.toJson(tasks, listType);
     }
 
-    /**
-     * Метод преобразования всех типов задач в строку Json
-     * с учетом установленного формата через адаптер
-     */
-    public static <T> String taskToJson(T task, Class<T> clazz) {
-        Gson gson = createJson();
-        return gson.toJson(task, clazz);
-    }
-
-    private static Gson createJson() {
-        GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
-        return gsonBuilder.create();
-    }
 }
 
 

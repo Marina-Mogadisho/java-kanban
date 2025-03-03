@@ -1,3 +1,4 @@
+import com.google.gson.reflect.TypeToken;
 import http.HttpTaskServer;
 import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
@@ -79,7 +80,8 @@ public class EpicHandlerTest {
 
         List<Epic> tasksList = manager.getListAllEpic(); // получили список задач из файла через менеджер
         // получили список задач из тела ответа сервера
-        List<Epic> responsList = BaseHttpHandler.jsonToListEpics(responseBody);
+        List<Epic> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Epic>>() {
+        }.getType());
 
         Epic t1 = tasksList.getFirst();  // первая задача из коллекции тасок из файла
         Epic t2 = responsList.getFirst();  // первая задача из ответа
@@ -139,7 +141,8 @@ public class EpicHandlerTest {
         String responseBody = ret3.getBody();
         int cod2 = ret3.getCod();
 
-        List<Subtask> response = BaseHttpHandler.jsonToListSubtasks(responseBody);
+        List<Subtask> response = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Subtask>>() {
+        }.getType());
         List<Subtask> ss = manager.getListAllSubtaskForEpicId(id1);
 
         assertEquals(response, ss, "Списки subtask по id Эпика не совпадают."); //

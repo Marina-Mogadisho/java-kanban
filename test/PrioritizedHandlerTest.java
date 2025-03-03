@@ -1,3 +1,4 @@
+import com.google.gson.reflect.TypeToken;
 import http.HttpTaskServer;
 import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
@@ -52,7 +53,8 @@ public class PrioritizedHandlerTest {
         int cod2 = ret2.getCod();
 
         List<Task> hh = manager.getPrioritizedTasks();
-        List<Task> responsList = BaseHttpHandler.jsonToListTasks(responseBody);/**/
+        List<Task> responsList = BaseHttpHandler.jsonToList(responseBody, new TypeToken<List<Task>>() {
+        }.getType());
         assertEquals(hh, responsList, "История просмотров не совпадает.");
 
         // проверяем код ответа

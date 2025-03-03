@@ -1,4 +1,5 @@
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import http.handler.BaseHttpHandler;
 import managers.IntersectionTaskException;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,20 @@ import java.util.List;
 public class JsonTest {
 
     @Test
+    void testJson2List() throws IntersectionTaskException {
+        String jsonTask = "[{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\"," +
+                "\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}]";
+        List<Task> tasks = BaseHttpHandler.jsonToList(jsonTask, new TypeToken<List<Task>>() {
+        }.getType());
+        System.out.println(tasks.getFirst().toString());
+    }
+
+    @Test
     void testJson2ListTask1() throws IntersectionTaskException {
-        String jsonTask = "[{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\",\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}]";
-        List<Task> tasks = BaseHttpHandler.jsonToListTasks(jsonTask);
+        String jsonTask = "[{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\"," +
+                "\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}]";
+        List<Task> tasks = BaseHttpHandler.jsonToList(jsonTask, new TypeToken<List<Task>>() {
+        }.getType());
         System.out.println(tasks.getFirst().toString());
     }
 
@@ -45,7 +57,6 @@ public class JsonTest {
                 "\t\t\"type\": \"TASK\",\n" +
                 "\t\t\"lock\": true\n" +
                 "\t}";
-        //String jsonTaskById2="{\"title\":\"Task 1\",\"description\":\"Description task 1\",\"status\":\"NEW\",\"duration\":10,\"startTime\":\"10:50 14.02.2025\",\"type\":\"TASK\"}";
         Task task3 = BaseHttpHandler.jsonToTask(jsonTaskById2, Task.class);
         System.out.println(task3.toString());
 
@@ -61,7 +72,9 @@ public class JsonTest {
         Subtask subtask2 = BaseHttpHandler.jsonToTask(jsonSubTask, Subtask.class);
         System.out.println(subtask2.toString());
 
-        String jsonTaskById2 = "{\"idEpic\":1,\"lockEpic\":true,\"title\":\"Subtask 1\",\"description\":\"Description subtask 1\",\"status\":\"NEW\",\"duration\":1,\"startTime\":\"09:50 14.02.2025\",\"type\":\"SUBTASK\",\"lock\":false}";
+        String jsonTaskById2 = "{\"idEpic\":1,\"lockEpic\":true,\"title\":\"Subtask 1\"," +
+                "\"description\":\"Description subtask 1\",\"status\":\"NEW\",\"duration\":1," +
+                "\"startTime\":\"09:50 14.02.2025\",\"type\":\"SUBTASK\",\"lock\":false}";
         Subtask subtask3 = BaseHttpHandler.jsonToTask(jsonTaskById2, Subtask.class);
         System.out.println(subtask3.toString());
 
@@ -71,19 +84,19 @@ public class JsonTest {
     void testJsonEpic() throws IntersectionTaskException {
         Epic epic1 = new Epic("tasks.Epic 1", "Description epic 1");
 
-        //Gson gson = new Gson();
         GsonBuilder gsonBuilder = new GsonBuilder(); // регламентируем новые параметры
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
 
-        //Gson gson = gsonBuilder.create();
         String jsonEpic = BaseHttpHandler.taskToJson(epic1, Epic.class);
         System.out.println(jsonEpic);
 
         Epic epic2 = BaseHttpHandler.jsonToTask(jsonEpic, Epic.class);
         System.out.println(epic2.toString());
 
-        String jsonEpic2 = "{\"idSubtask\":[],\"endTime\":\"\",\"title\":\"tasks.Epic 1\",\"description\":\"Description epic 1\",\"status\":\"NEW\",\"duration\":\"\",\"startTime\":\"\",\"type\":\"EPIC\",\"lock\":false}\n";
+        String jsonEpic2 = "{\"idSubtask\":[],\"endTime\":\"\",\"title\":\"tasks.Epic 1\"," +
+                "\"description\":\"Description epic 1\",\"status\":\"NEW\",\"duration\":\"\"," +
+                "\"startTime\":\"\",\"type\":\"EPIC\",\"lock\":false}\n";
         Epic epic3 = BaseHttpHandler.jsonToTask(jsonEpic2, Epic.class);
         System.out.println(epic3.toString());
     }
