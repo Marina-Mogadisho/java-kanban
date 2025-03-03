@@ -39,7 +39,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
      */
     public void load() {
         /*
-        New FileReader - Создает новый объект класса FileReader, учитывая имя файла, из которого выполняется чтение (fileName).
+        New FileReader - Создает новый объект класса FileReader, учитывая имя файла,
+        из которого выполняется чтение (fileName).
         И в нужной кодировке UTF_8.
         New BufferedReader - Открывает поток и буферизует ввод данных из указанного файла.
          */
@@ -86,7 +87,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     if (id < 0 || idEpic < 0) continue;
                     setNextId(id);
                     setNextId(idEpic);
-                    //public Subtask(Integer idEpic, String title, String description, Status status)
                     String startTime = null;
                     String duration = "0";
                     if (split.length > 5) {
@@ -114,7 +114,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private Integer checkTaskAndId(String[] split) {
         Integer id = 0;
         try {
-            // в"TASK" и "EPIC" должно быть 5 параметров, значит и длина д.б. = 5
+            // в "TASK" и "EPIC" должно быть 5 параметров, значит и длина д.б. = 5
             if (split.length < 5) {
                 throw new ManagerLoadException("При считывании из файла не хватает параметров задачи");
             }
